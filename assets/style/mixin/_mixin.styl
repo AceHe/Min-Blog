@@ -1,0 +1,35 @@
+flexLayout(dir = row, justify-content = center, align-items = center, iswrap = nowrap) {
+  display flex
+  flex-direction dir
+  justify-content justify-content
+  align-items align-items
+  flex-wrap iswrap
+}
+
+full() {
+  position absolute
+  display block
+  top 0
+  right 0
+  bottom 0
+  left 0
+  width 100%
+  height @width
+}
+
+textOverflow() {
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
+}
+
+lineLimit(line = 2) {
+  display -webkit-box
+  overflow hidden
+  -webkit-line-clamp line
+  -webkit-box-orient vertical
+}
+
+transition(project = all, time = $animation-duration-slow, function = $ease) {
+  transition project time function
+}

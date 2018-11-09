@@ -1,0 +1,159 @@
+* {
+    box-sizing border-box
+    -webkit-tap-highlight-color transparent
+}
+
+*:before,
+*:after {
+    box-sizing border-box
+}
+
+:root {
+    text-size-adjust 100%
+    cursor default
+}
+
+body {
+  font-family $font-family-base
+  line-height 1.42857143
+  background-color var(--body-color)
+  color var(--text-color)
+  font-size $font-size-base
+  overflow-x hidden
+  -moz-osx-font-smoothing grayscale
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing antialiased
+  text-rendering optimizeLegibility
+  user-select none
+
+  a {
+    color var(--link-color)
+    background transparent
+    text-decoration none
+    outline none
+    cursor pointer
+    transition()
+
+    &:focus {
+      text-decoration none
+      text-decoration-skip ink
+    }
+
+    &:active,
+    &:hover {
+      color var(--link-color-hover)
+      outline 0
+      text-decoration none
+    }
+
+    &[disabled] {
+      color var(--disabled-color)
+      cursor not-allowed
+      pointer-events none
+    }
+  }
+
+  button {
+    background var(--button-color)
+    border-radius 2px
+    border 1px solid var(--border-color)
+    cursor pointer
+    transition()
+
+    &:hover {
+      background var(--button-color-hover)
+      border-color var(--border-color-dark)
+    }
+  }
+}
+
+// unify the setting of elements's margin and padding for browsers
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
+  margin 0
+  padding 0
+}
+
+// Reset fonts for relevant elements
+button,input,select,textarea {
+  font-family inherit
+  font-size inherit
+  line-height inherit
+  color inherit
+}
+
+// Remove the clear button of a text input control in IE10+
+input::-ms-clear, input::-ms-reveal {
+  display none
+}
+
+textarea {
+  resize none !importan
+}
+
+input,
+input:focus,
+input[type="text"],
+input[type="text"]:focus,
+select,
+textarea {
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+button {
+  outline: none !important;
+}
+
+ol, ul {
+  list-style none
+}
+
+svg:not(:root) {
+  overflow hidden
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin 0
+  padding 0
+  line-height $line-height-base
+
+  &.title {
+    font-family $font-family-title
+  }
+}
+
+.none {
+  display none !important
+}
+
+::-webkit-input-placeholder {
+  color var(--disabled-color)
+}
+
+:-moz-placeholder {
+  color var(--disabled-color)
+}
+
+::-moz-placeholder {
+  color var(--disabled-color)
+}
+
+:-ms-input-placeholder {
+  color var(--disabled-color)
+}
+
+::selection {
+  background var(--selection-color)
+}
+
+::webkit-selection {
+  background var(--selection-color)
+}
+
+::moz-selection {
+  background var(--selection-color)
+}
+
+.icon {
+  color var(--text-color)
+}
