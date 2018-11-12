@@ -1,8 +1,10 @@
 <template>
 	<section class="guestbook-page">
-		<!-- <Modal title="我的留言" v-model="showInputBox">
-			<CommentInputBox style="box-shadow: none;" ref="inputBox" is-message @on-publish="publishSuccess"></CommentInputBox>
-		</Modal> -->
+		<Modal :title="'我的留言'"  
+			:showInputBox="showInputBox" 
+			@changeBoxState='changeBoxState'>
+			<CommentInputBox style="box-shadow: none;" ref="inputBox" is-message></CommentInputBox>
+		</Modal>
 
 		<div class="submit-field">
 			<div class="welcome">
@@ -24,24 +26,27 @@
 			</transition-group>
 		</transition-group>
 
-		<!-- <p class="no-data" v-if="pageInfo.total < 1 && !messageListFetching">空空如也</p>
+		<!-- <p class="no-data">空空如也</p>
+
 		<transition name="fade" mode="out-in">
-			<div class="indicator" v-if="messageListFetching || !hasNoMore">
-				<Loading v-if="messageListFetching" no-text></Loading>
-				<button class="loadmore" v-else-if="!hasNoMore && messageList.length" @click="loadmore">来，继续翻</button>
+			<div class="indicator">
+				<button class="loadmore">来，继续翻</button>
 			</div>
 		</transition> -->
 	</section>
 </template>
 
 <script>
+	import CommentInputBox from '@/components/common/Comments/CommentInputBox'
 	import Modal from '@/components/common/Modal'
+
 	import MessageItem from '@/components/common/MessageItem'
 
 	export default {
 		name: 'Guestbook',
 		components: {
-			// MessageItem
+			CommentInputBox,
+			Modal,
 			MessageItem
 		},
 		head () {
@@ -53,7 +58,9 @@
 			return{
 				columnNum: 3,
 				columnData: [],
-				columnStyle: {}			
+				columnStyle: {},
+
+				showInputBox: false,	
 			}
 		},
 		created(){
@@ -195,12 +202,17 @@
 			this.columnStyle = {
 					flexBasis: (100 / this.columnNum) + '%'
 			}
-			console.log( this.columnStyle )
 
 		},
 		methods: {
+			// opne Modal
 			openBox(){
+				this.showInputBox = true;
+			},
 
+			// close Modal
+			changeBoxState(){
+				this.showInputBox = false;
 			}
 		}
 	}

@@ -1,5 +1,175 @@
 <template>
-	<h1>
-		Hello World!
-	</h1>
+	<section class="home-page">
+		<div class="category-panel">
+			<Card class="category"
+				no-padding
+				v-for="item in categoryList"
+				:key="item._id">
+				<router-link :to="`/category/${item.name}`">
+					<img class="background-image" v-if="item.img"
+						:src="item.img" alt="">
+					<div class="background" :style="{
+						backgroundImage: `url(${item.img})`
+						}"></div>
+					<div class="mask"></div>
+					<div class="content">
+						<i class="icon" :class="[`icon-${item.icon}`]"></i>
+						<h3 class="name">{{ item.name }}</h3>
+					</div>
+				</router-link>
+			</Card>
+		</div>
+		<Card class="article-panel">
+			<ArticleList></ArticleList>
+		</Card>
+	</section>
 </template>
+
+<script>
+	import Card  from '@/components/common/Card'
+	import ArticleList from '@/components/common/ArticleList'
+
+	export default {
+		name: 'Index',
+		components: {
+			Card,
+			ArticleList
+		},
+		head () {
+			return {
+				title: '小何才露尖尖角 - 代码'
+			}
+		},
+		data(){
+			return {
+				categoryList: []
+			}
+		},
+		created(){
+			this.categoryList = [{
+				_id: 0,
+				name: '戎马一生',
+				icon: 'code',
+				img: 'https://static.jooger.me/img/common/category/coding_1538902881058.png'
+			},{
+				_id: 1,
+				name: '玩乐',
+				icon: 'life',
+				img: 'https://static.jooger.me/img/common/category/life_1538903080467.jpg'
+			},{
+				_id: 2,
+				name: '随笔',
+				icon: 'think',
+				img: 'https://static.jooger.me/img/common/category/think_1538903151652.jpg'
+			},{
+				_id: 3,
+				name: '笔记',
+				icon: 'read',
+				img: 'https://static.jooger.me/img/common/category/read_1538902931459.jpg'
+			}]
+		}
+	}
+</script>
+
+<style lang="stylus" scoped>
+	@import '~@/assets/style/init'
+
+	.home-page {
+		.category-panel {
+			display flex
+			margin 0 -8px 16px
+
+			.category {
+				position relative
+				flex 1 0
+				min-height 100px
+				max-height 100px
+				margin 0 8px
+				text-align center
+				overflow hidden
+				border-radius 4px
+
+				a {
+					width 100%
+					text-decoration none
+					color var(--light-color)
+				}
+
+				.background {
+					full()
+					background-size cover
+					background-position center center
+					transition()
+
+					&-image {
+						width 100%
+						height 100%
+					}
+				}
+
+				.mask {
+					full()
+					background-color var(--overlay-color)
+					transition()
+				}
+
+				.content {
+					position absolute
+					top 50%
+					left 50%
+					width 100%
+					transform translate(-50%, -50%)
+
+					.icon {
+						font-size 28px
+						color var(--light-color)
+					}
+
+					.name {
+						margin 8px 0 0
+					}
+				}
+
+				&:hover {
+					.background {
+						transform scale(1.2)
+					}
+
+					.mask {
+						background-color var(--overlay-color-dark)
+					}
+				}
+			}
+		}
+
+		.mobile-layout & {
+			padding-top $padding-xs
+		}
+	}
+
+	.app.mobile-layout {
+		.home-page {
+			.category-panel {
+				margin 0 0 $padding-xs
+				padding 0 ($padding-xs / 2)
+
+				.category {
+					margin 0 ($padding-xs / 2)
+					min-height 60px
+					max-height 60px
+
+					.content {
+						.icon {
+							font-size $font-size-lger
+						}
+
+						.name {
+							margin-top ($padding-xs / 2)
+							font-size $font-size-base
+						}
+					}
+				}
+			}
+		}
+	}
+</style>	

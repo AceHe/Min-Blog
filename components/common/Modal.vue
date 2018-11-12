@@ -1,6 +1,6 @@
 <template>
 	<transition name="slide-down" mode="out-in">
-		<div class="modal" v-if="value">
+		<div class="modal" v-if="showInputBox">
 			<div class="overlay" @click="close"></div>
 				<div class="wrapper" :style="wrapperStyle">
 				<h3 class="title" v-if="title">{{ title }}</h3>
@@ -12,7 +12,37 @@
 
 <script>
 	export default {
-		name: 'Modal'
+		name: 'Modal',
+		props: ['title', 'showInputBox'],
+		data() {
+			return {
+				wrapperStyle: '',
+				width: 600
+			}
+		},
+		created() {
+			this.wrapperStyle = this.wrapper();
+		},
+		watch: {
+			showInputBox(val) {
+				document.body.style.overflow = val ? 'hidden' : '';
+			}
+		},
+		methods: {
+
+			// 弹窗宽度
+			wrapper(){
+				return {
+					width: this.width + 'px'
+				}
+			},
+
+			// 关闭弹窗
+			close(){
+				this.$emit('changeBoxState', false)
+			}
+
+		}
 	}
 </script>
 

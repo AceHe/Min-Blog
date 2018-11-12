@@ -12,7 +12,6 @@ import { setContext, getLocation, getRouteData } from './utils'
 
 /* Plugins */
 import nuxt_plugin_countto_419519ed from 'nuxt_plugin_countto_419519ed' // Source: ..\\plugins\\count-to (ssr: false)
-import nuxt_plugin_message_d2d320da from 'nuxt_plugin_message_d2d320da' // Source: ..\\plugins\\message (ssr: false)
 
 
 // Component: <no-ssr>
@@ -137,7 +136,6 @@ async function createApp (ssrContext) {
   
   if (process.client) { 
     if (typeof nuxt_plugin_countto_419519ed === 'function') await nuxt_plugin_countto_419519ed(app.context, inject)
-    if (typeof nuxt_plugin_message_d2d320da === 'function') await nuxt_plugin_message_d2d320da(app.context, inject)
   }
 
   // If server-side, wait for async component to be resolved first

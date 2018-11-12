@@ -63,7 +63,6 @@ module.exports = {
 
     plugins: [
         { src: '@/plugins/count-to', ssr: false },
-        { src: '@/plugins/message', ssr: false },
     ]
 
 }
