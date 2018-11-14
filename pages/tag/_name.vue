@@ -1,0 +1,58 @@
+<template>
+    <section class="tag-page">
+        <Card>
+            <div slot="header" class="info-header">
+                <i class="icon" :class="[`icon-${tag.icon || 'tag'}`]"></i>
+                <div class="search">与
+                    <span class="keyword">{{ $route.params.name }}</span>
+                    标签有关的文章
+                </div>
+                <div class="count">
+                    共搜索到
+                    <em class="num">5</em>
+                    篇文章
+                </div>
+            </div>
+            <div class="list-content">
+                <ArticleList></ArticleList>
+            </div>
+        </Card>
+    </section>
+</template>
+
+<script>
+    import Card  from '@/components/common/Card'
+    import ArticleList from '@/components/common/ArticleList'
+
+    export default {
+        name: 'Tag',
+        components: {
+            Card,
+            ArticleList
+        },
+        data () {
+            return {
+                tag: {}
+            }
+        },
+        head () {
+            return {
+                title: `${this.$route.params.name} | Tag`
+            }
+        },
+        created(){
+            this.tag = {
+                icon: '',
+            }
+        }
+    }
+</script>
+
+<style lang="stylus" scoped>
+    @import '~@/assets/style/init'
+
+    .tag-page {
+        width 100%
+    }
+</style>
+

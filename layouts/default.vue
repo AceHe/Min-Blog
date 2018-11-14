@@ -1,30 +1,57 @@
 <template>
-	<div class="app full-column">
+	<div class="app" :class="appClass">
+
 		<PCHeader></PCHeader>
+
 		<div class="app-main">
 			<main class="main">
 				<div class="content-container">
 					<nuxt></nuxt>
 				</div>
+				<transition name="fade" mode="out-in">
+					<div class="aside-container" v-if="!fullColumn">
+						<PCAside></PCAside>
+					</div>
+				</transition>
 			</main>
+
 			<PCFooter></PCFooter>
 		</div>
+
 	</div>
 </template>
 
 <script>
 	import PCHeader from '~/components/pc/Header'
 	import PCFooter from '~/components/pc/Footer'
+	import PCAside from '~/components/pc/Aside/Aside'
 
 	export default {
 		components: {
 			PCHeader,
 			PCFooter,
+			PCAside,
+		},
+		data () {
+			return{
+				appClass: {},
+				fullColumn: false
+			}
 		},
 		head () {
 			return {
 				bodyAttrs: {
 					class: 'theme-light'
+				}
+			}
+		},
+		created () {
+			this.appClass = this.getAppClass();
+		},
+		methods: {
+			getAppClass() {
+				return {
+					'full-column': this.fullColumn
 				}
 			}
 		}

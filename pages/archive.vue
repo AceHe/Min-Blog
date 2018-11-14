@@ -24,10 +24,10 @@
 										<li class="article-item" v-for="article in month.articles" :key="article._id">
 											<article class="article">
 												<time class="time" :datatitme="article.createdAt">
-													{{ article.createdAt | dateFormat('MM-DD') }}
+													{{ article.createdAt }}
 												</time>
-												<span class="source" :class="[getConstantItem('ARTICLE_SOURCE', article.source, 'code')]">
-													{{ article.source | constantFilter('ARTICLE_SOURCE') }}
+												<span class="source" :class="['translate']">
+													{{ article.source }}
 												</span>
 												<nuxt-link class="link"
 													:to="`/article/${article._id}`">
@@ -48,23 +48,71 @@
 
 <script>
 	import Card  from '@/components/common/Card'
+	import { dateFormat } from '@/utils/filters'
 
 	export default {
 		name: 'Archive',
 		components: {
 			Card
 		},
-		head () {
-			return {
-				title: '归档'
-			}
-		},
+		filters: {
+            dateFormat(value) {
+                if (!value) return ''
+                return dateFormat(value)
+            }
+        },
 		data(){
 			return {
 				archives: [],
 				archivesCount: 10,
 				archivesFetching: false,
 			}
+		},
+		head () {
+			return {
+				title: '归档'
+			}
+		},		
+		created(){
+			this.archives = [{
+				year: '2018',
+				months: [{
+					month: '9',
+					monthStr: 'September',
+					articles: [{
+						_id: 0,
+						createdAt: '10-20',
+						source: '原创',
+						title: '挑剔挑剔标题碧桃i',
+					}]
+				},{
+					month: '8',
+					monthStr: 'August',
+					articles: [{
+						_id: 0,
+						createdAt: '10-20',
+						source: '原创',
+						title: '挑剔挑剔标题碧桃i',
+					}]
+				}]
+			},{
+				year: '2017',
+				months: [{
+					month: '9',
+					monthStr: 'September',
+					articles: [{
+						_id: 0,
+						createdAt: '11-21',
+						source: '转载',
+						title: '挑剔士大夫挑剔标题碧桃i',
+					},{
+						_id: 1,
+						createdAt: '11-20',
+						source: '转载',
+						title: '挑剔标题碧桃i',
+					}]
+				}]
+			}]
 		}
 	}
 </script>

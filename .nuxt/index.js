@@ -11,6 +11,7 @@ import { setContext, getLocation, getRouteData } from './utils'
 
 
 /* Plugins */
+import nuxt_plugin_axios_da08f7f8 from 'nuxt_plugin_axios_da08f7f8' // Source: ./axios.js
 import nuxt_plugin_countto_419519ed from 'nuxt_plugin_countto_419519ed' // Source: ..\\plugins\\count-to (ssr: false)
 
 
@@ -133,6 +134,7 @@ async function createApp (ssrContext) {
 
   // Plugin execution
   
+  if (typeof nuxt_plugin_axios_da08f7f8 === 'function') await nuxt_plugin_axios_da08f7f8(app.context, inject)
   
   if (process.client) { 
     if (typeof nuxt_plugin_countto_419519ed === 'function') await nuxt_plugin_countto_419519ed(app.context, inject)

@@ -33,7 +33,10 @@
 	    methods: {
 	        // 搜索文章
 	        search() {
-
+				if(this.keyword) {
+					this.$router.push(`/search/${this.keyword}`);
+					this.keyword = '';
+				}
 	        }
 	    }
 	}

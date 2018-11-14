@@ -49,8 +49,6 @@
                 source: '原创',
                 createdAt: '2018-08-12'
             }]
-
-            console.log( this.articleList.length )
         },
         methods: {
             loadmore(){

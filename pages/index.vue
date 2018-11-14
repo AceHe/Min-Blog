@@ -29,6 +29,8 @@
 	import Card  from '@/components/common/Card'
 	import ArticleList from '@/components/common/ArticleList'
 
+    import { getArticles } from '@/api/index'
+
 	export default {
 		name: 'Index',
 		components: {
@@ -46,28 +48,18 @@
 			}
 		},
 		created(){
-			this.categoryList = [{
-				_id: 0,
-				name: '戎马一生',
-				icon: 'code',
-				img: 'https://static.jooger.me/img/common/category/coding_1538902881058.png'
-			},{
-				_id: 1,
-				name: '玩乐',
-				icon: 'life',
-				img: 'https://static.jooger.me/img/common/category/life_1538903080467.jpg'
-			},{
-				_id: 2,
-				name: '随笔',
-				icon: 'think',
-				img: 'https://static.jooger.me/img/common/category/think_1538903151652.jpg'
-			},{
-				_id: 3,
-				name: '笔记',
-				icon: 'read',
-				img: 'https://static.jooger.me/img/common/category/read_1538902931459.jpg'
-			}]
-		}
+			this.getCategory()
+		},
+		methods: {
+            async getCategory() {
+                const res = await getArticles();
+                if( res.data.code == 0 ){
+                	this.categoryList = res.data.data;
+                }else{
+                	console.log('ip', res.data)
+                }
+            }
+        }
 	}
 </script>
 

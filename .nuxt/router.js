@@ -4,6 +4,10 @@ import Router from 'vue-router'
 const _bee8c2e4 = () => import('..\\pages\\archive.vue' /* webpackChunkName: "pages_archive" */).then(m => m.default || m)
 const _2e25fe4e = () => import('..\\pages\\about.vue' /* webpackChunkName: "pages_about" */).then(m => m.default || m)
 const _7883b3e6 = () => import('..\\pages\\guestbook.vue' /* webpackChunkName: "pages_guestbook" */).then(m => m.default || m)
+const _4f0c48f4 = () => import('..\\pages\\tag\\_name.vue' /* webpackChunkName: "pages_tag__name" */).then(m => m.default || m)
+const _1ac8a5f8 = () => import('..\\pages\\category\\_name.vue' /* webpackChunkName: "pages_category__name" */).then(m => m.default || m)
+const _158b67e8 = () => import('..\\pages\\article\\_id.vue' /* webpackChunkName: "pages_article__id" */).then(m => m.default || m)
+const _61037bb6 = () => import('..\\pages\\search\\_keyword.vue' /* webpackChunkName: "pages_search__keyword" */).then(m => m.default || m)
 const _08a4db9e = () => import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */).then(m => m.default || m)
 
 Vue.use(Router)
@@ -79,6 +83,26 @@ export function createRouter () {
 			path: "/guestbook",
 			component: _7883b3e6,
 			name: "guestbook"
+		},
+		{
+			path: "/tag/:name?",
+			component: _4f0c48f4,
+			name: "tag-name"
+		},
+		{
+			path: "/category/:name?",
+			component: _1ac8a5f8,
+			name: "category-name"
+		},
+		{
+			path: "/article/:id?",
+			component: _158b67e8,
+			name: "article-id"
+		},
+		{
+			path: "/search/:keyword?",
+			component: _61037bb6,
+			name: "search-keyword"
 		},
 		{
 			path: "/",

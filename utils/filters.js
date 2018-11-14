@@ -5,3 +5,7 @@ export function dateFormat(){
 export function countFilter(){
 	return 2
 }
+
+export function constantFilter(){
+	return '原创'
+}

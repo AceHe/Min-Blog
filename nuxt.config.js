@@ -63,6 +63,10 @@ module.exports = {
 
     plugins: [
         { src: '@/plugins/count-to', ssr: false },
-    ]
+    ],
+
+    modules: [
+        '@nuxtjs/axios',
+    ],
 
 }
