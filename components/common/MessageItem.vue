@@ -1,8 +1,8 @@
 <template>
-    <Card class="message-item" :class="{ 'identified': user && message.author._id === user._id }">
+    <Card class="message-item" :class="{ 'identified': user && message.author.uuid === user.uuid }">
         <no-ssr>
             <transition name="fade">
-                <span class="tag" v-if="user && message.author._id === user._id">我</span>
+                <span class="tag" v-if="user && message.author.uuid === user.uuid">我</span>
             </transition>
         </no-ssr>
         <a class="user" :href="message.author.site || 'javascript:;'" target="_blank">
@@ -17,7 +17,7 @@
                 :title="isLiked ? '已点赞' : ''"
                 @click="like(message)">
                 <i class="icon icon-like-fill"></i>
-                <span class="count" v-if="message.ups">{{ message.ups | countFilter }}</span>
+                <span class="count" v-if="message.ups">{{ message.ups }}</span>
             </a>
             <time class="time" :datatitme="message.createdAt">
                 {{ message.createdAt | dateFormat }}
@@ -28,7 +28,10 @@
 
 <script>
     import Card from '@/components/common/Card'
-    import { dateFormat, countFilter } from '@/utils/filters'
+    import { parseTime, countFilter } from '@/utils/filters'
+    import { mapActions } from 'vuex'
+
+    import { setGuestbookLike } from '@/api/index'
 
     export default {
         name: 'MessageItem',
@@ -39,7 +42,7 @@
         data(){
             return {
                 user: {
-                    _id: 1
+                    uuid: 1
                 },
                 isLiked: false,
                 liking: false,
@@ -48,7 +51,7 @@
         filters: {
             dateFormat: function (value) {
                 if (!value) return ''
-                return dateFormat(value)
+                return parseTime(value)
             },
             countFilter: function (value) {
                 if (!value) return ''
@@ -56,10 +59,23 @@
             }
         },
         methods: {
-            like () {
-                this.$message.info('你已经点过赞了')
+            async like (message) {
+                if( this.isLiked || this.liking) return;
+
+                let data = {
+                    uuid: message.uuid,
+                    ups: message.ups
+                }
+                const promise = this.$store.dispatch('comments/like', data);
+                promise.then(res=>{
+                    console.log( 'res',res )
+                })
+                
+                this.isLiked = true;
+                this.liking = true;
+                this.$emit( 'updataLike', message.uuid, message.index);
             }
-        },
+        }
     }
 </script>
 

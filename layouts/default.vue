@@ -1,5 +1,5 @@
 <template>
-	<div class="app" :class="appClass">
+	<div class="app" :class="{'full-column': fullColumn}">
 
 		<PCHeader></PCHeader>
 
@@ -32,12 +32,6 @@
 			PCFooter,
 			PCAside,
 		},
-		data () {
-			return{
-				appClass: {},
-				fullColumn: false
-			}
-		},
 		head () {
 			return {
 				bodyAttrs: {
@@ -45,14 +39,9 @@
 				}
 			}
 		},
-		created () {
-			this.appClass = this.getAppClass();
-		},
-		methods: {
-			getAppClass() {
-				return {
-					'full-column': this.fullColumn
-				}
+		computed: {
+			fullColumn () { 
+				return this.$store.state.app.fullColumn 
 			}
 		}
 	}

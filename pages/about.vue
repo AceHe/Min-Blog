@@ -2,7 +2,7 @@
 	<section class="about-page">
 		<div class="base-info">
 			<img class="avatar" src="https://avatars1.githubusercontent.com/u/16385416?v=4" alt="ace">
-			<h1 class="name">Ace</h1>
+			<h1 class="name">Ace·Hemin</h1>
 			<p class="slogan">吃喝玩乐</p>
 		</div>
 		<div class="block">
@@ -93,6 +93,8 @@
 <script>
 	import Card  from '@/components/common/Card'
 
+	import { mapMutations } from 'vuex'
+
 	export default {
 		name: 'About',
 		components: {
@@ -102,6 +104,10 @@
 			return {
 				title: '关于'
 			}
+		},
+		fetch ({ store }) {
+			store.commit('app/SET_FULL_COLUMN', true)
+			return Promise.resolve()
 		},
 		data() {
 			return {

@@ -7,15 +7,33 @@
                     <div class="form">
                         <div class="name">
                             <i class="icon icon-name"></i>
-                            <input type="text" placeholder="昵称（必填）" required="required" name="name" autocomplete="false">
+                            <input 
+                                v-model.trim="name"
+                                type="text" 
+                                placeholder="昵称（必填）" 
+                                required="required" 
+                                name="name" 
+                                autocomplete="false">
                         </div>
                         <div class="email">
                             <i class="icon icon-email-fill"></i>
-                            <input type="email" placeholder="邮箱（必填）" required="required" name="email" autocomplete="false">
+                            <input 
+                                v-model.trim="email"
+                                type="email" 
+                                placeholder="邮箱（必填）" 
+                                required="required" 
+                                name="email" 
+                                autocomplete="false">
                         </div>
                         <div class="site">
                             <i class="icon icon-site"></i>
-                            <input type="text" placeholder="站点" required="required" name="site" autocomplete="false">
+                            <input 
+                                v-model.trim="site"
+                                type="url" 
+                                placeholder="站点" 
+                                required="required" 
+                                name="site" 
+                                autocomplete="false">
                         </div>
                     </div>
                 </div>
@@ -24,6 +42,7 @@
                 <div class="content">
                     <MDEditor class="editor" 
                         ref="editor" 
+                        v-model="content"
                         :disabled="false" 
                         :rows="3" 
                         :placeholder="'说点儿什么'">
@@ -47,6 +66,8 @@
     import Card  from '@/components/common/Card'
     import MDEditor  from '@/components/common/MDEditor'
 
+    import { addGuestbook } from '@/api/index'
+
     export default {
         name: 'CommentInputBox',
         components: {
@@ -58,11 +79,25 @@
                 isChild: true,
                 isMessage: true,
                 loading: false,
+
+                name: '',
+                email: '',
+                site: '',
+                content: ''
             }
         },
         methods: {
-            submit() {
+            async submit() {
+                let data = {
+                    name: this.name,
+                    email: this.email,
+                    site: this.site,
+                    content: this.content
+                }
 
+                const res = await addGuestbook(data);
+
+                this.$emit( 'addGuesbook' );
             }
         }
     }

@@ -8,7 +8,8 @@
                 :rows="rows"
                 :value="value"
                 required="required"
-                aria-required="true">
+                aria-required="true"
+                @input="handleValueChange">
             </textarea>
         </div>
     </div>
@@ -23,6 +24,11 @@
                 cols: 45,
                 rows: 4,
                 placeholder: '写点什么'
+            }
+        },
+        methods: {
+            handleValueChange (e) {
+                this.$emit('input', e.target.value.trim())
             }
         }
     }

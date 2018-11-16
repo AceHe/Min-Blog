@@ -3,7 +3,11 @@
 		<Modal :title="'我的留言'"  
 			:showInputBox="showInputBox" 
 			@changeBoxState='changeBoxState'>
-			<CommentInputBox style="box-shadow: none;" ref="inputBox" is-message></CommentInputBox>
+			<CommentInputBox 
+				style="box-shadow: none;" 
+				ref="inputBox" 
+				is-message
+				@addGuesbook="getGuestbook"></CommentInputBox>
 		</Modal>
 
 		<div class="submit-field">
@@ -16,31 +20,38 @@
 				<button class="submit-btn" @click="openBox">我要上墙</button>
 			</div>
 			<div class="count">
-				<span>已有 18 条留言</span>
+				<span>已有 {{guesbookTotal}} 条留言</span>
 			</div>
 		</div>
 
-		<transition-group tag="div" name="fade" mode="out-in" class="list-field">
+		<transition-group v-if="guesbookTotal > 0" tag="div" name="fade" mode="out-in" class="list-field">
 			<transition-group tag="div" name="fade" mode="out-in" class="column" :style="columnStyle" v-for="(item, index) in columnData" :key="index">
-				<MessageItem v-for="m in item" :key="m._id" :message="m"></MessageItem>
+				<MessageItem 
+					v-for="m in item" 
+					:key="m.uuid" 
+					:message="m"
+					@updataLike="handleLike"></MessageItem>
 			</transition-group>
 		</transition-group>
 
-		<!-- <p class="no-data">空空如也</p>
+		<p class="no-data" v-if="guesbookTotal == 0">空空如也</p>
 
-		<transition name="fade" mode="out-in">
+		<transition name="fade" mode="out-in" v-if="!hasNoMore">
 			<div class="indicator">
-				<button class="loadmore">来，继续翻</button>
+				<button class="loadmore" @click="loadmore">来，继续翻</button>
 			</div>
-		</transition> -->
+		</transition>
 	</section>
 </template>
 
 <script>
 	import CommentInputBox from '@/components/common/Comments/CommentInputBox'
 	import Modal from '@/components/common/Modal'
-
 	import MessageItem from '@/components/common/MessageItem'
+
+	import { getGuestbooks } from '@/api/index'
+
+	import { mapMutations } from 'vuex'
 
 	export default {
 		name: 'Guestbook',
@@ -54,157 +65,73 @@
 				title: '留言墙'
 			}
 		},
+		fetch ({ store }) {
+			store.commit('app/SET_FULL_COLUMN', true)
+			return Promise.resolve()
+		},
 		data(){
 			return{
-				columnNum: 3,
-				columnData: [],
-				columnStyle: {},
+				columnNum: 3, // 留言墙分几列
+				columnData: [], // 留言墙列表
+				columnStyle: {}, // 留言墙宽度
+				columnCount: 0, // 计算留言排列顺序
+
+				guesbookTotal: 0, // 总留言条数
+
+				page: 1,
+				limt: 4,
 
 				showInputBox: false,	
 			}
 		},
+		computed: {
+			hasNoMore(){
+				let result = false;
+				if( this.page * this.limt >= this.guesbookTotal ){
+					result = true
+				}
+				return result;
+			}
+		},
 		created(){
 
-			this.columnData = [[{
-				_id: 0,
-			    author: {
-					_id: 0,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'Ace'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			},{
-				_id: 1,
-			    author: {
-					_id: 1,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'Fce'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			},{
-				_id: 2,
-			    author: {
-					_id: 0,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'Lce'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			},{
-				_id: 3,
-			    author: {
-					_id: 0,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'LFe'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			}],[{
-				_id: 0,
-			    author: {
-					_id: 0,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'Ace'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			},{
-				_id: 1,
-			    author: {
-					_id: 1,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'Fce'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			},{
-				_id: 2,
-			    author: {
-					_id: 0,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'Lce'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			},{
-				_id: 3,
-			    author: {
-					_id: 0,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'LFe'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			}],[{
-				_id: 0,
-			    author: {
-					_id: 0,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'Ace'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			},{
-				_id: 1,
-			    author: {
-					_id: 1,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'Fce'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			},{
-				_id: 2,
-			    author: {
-					_id: 0,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'Lce'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			},{
-				_id: 3,
-			    author: {
-					_id: 0,
-					site: 'https://www.baiud.com/',
-					avatar: 'https://jooger.me/proxy/s.gravatar.com/avatar/bdc703b97b9ee52ea649b661e2656291?s=100&r=x&d=retro',
-					name: 'LFe'
-			    },
-                renderedContent: 'aaaa',
-                ups: 'aaaa',
-                createdAt: 'aaaa'
-			}]],
-
+			// 留言墙 每列宽度
 			this.columnStyle = {
-					flexBasis: (100 / this.columnNum) + '%'
-			}
+				flexBasis: (100 / this.columnNum) + '%'
+			};
+			// 留言墙列表 初始化
+			this.columnData = [[],[],[]];
+
+			this.getGuestbook();
 
 		},
 		methods: {
+			// 获取留言墙列表
+			async getGuestbook() {
+				let data = {
+					page: this.page,
+					limt: this.limt
+				}
+                const res = await getGuestbooks(data);
+                
+                let guesbook = res.data.data;
+                this.guesbookTotal = res.data.total;
+
+				for( let item of guesbook ){
+					this.columnCount++
+					if( this.columnCount % 3 == 1 ){
+						item.index = 0;
+						this.columnData[0].push( item )
+					}else if( this.columnCount % 3 == 2 ){
+						item.index = 1;
+						this.columnData[1].push( item )
+					}else{
+						item.index = 2;
+						this.columnData[2].push( item )
+					}
+				}
+            },
+
 			// opne Modal
 			openBox(){
 				this.showInputBox = true;
@@ -213,7 +140,23 @@
 			// close Modal
 			changeBoxState(){
 				this.showInputBox = false;
-			}
+			},
+
+			// 加载更多
+			loadmore(){
+				this.page++;
+				this.getGuestbook();
+			},
+
+			// 点赞留言
+			handleLike(uuid, index){
+				for( let item of this.columnData[index] ){
+					if( item.uuid == uuid ){
+						item.ups++
+					}
+				}
+			},
+
 		}
 	}
 </script>

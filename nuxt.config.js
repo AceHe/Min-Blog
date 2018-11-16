@@ -57,12 +57,12 @@ module.exports = {
     },
 
     build: {
-        analyze: false,
-        publicPath: '/resource/'
+        analyze: false
     },
 
     plugins: [
         { src: '@/plugins/count-to', ssr: false },
+        { src: '@/plugins/router', ssr: false },
     ],
 
     modules: [
