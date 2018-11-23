@@ -4,12 +4,12 @@
             <div slot="header" class="info-header">
                 <i class="icon" :class="[`icon-${tag.icon || 'tag'}`]"></i>
                 <div class="search">与
-                    <span class="keyword">{{ $route.params.name }}</span>
+                    <span class="keyword">{{ tag.name }}</span>
                     标签有关的文章
                 </div>
                 <div class="count">
                     共搜索到
-                    <em class="num">5</em>
+                    <em class="num">{{ tag.count }}</em>
                     篇文章
                 </div>
             </div>
@@ -30,19 +30,24 @@
             Card,
             ArticleList
         },
-        data () {
-            return {
-                tag: {}
+        computed: {
+            tag () { 
+                let tagList = this.$store.getters['article/tag'];
+                let obj = {};
+                for( let item of tagList ){
+                    if( item.name === this.$route.params.name ){
+                        obj = item;
+                    }
+                }
+                return obj
             }
+        },
+        validate ({ params }) {
+            return !!params.name
         },
         head () {
             return {
                 title: `${this.$route.params.name} | Tag`
-            }
-        },
-        created(){
-            this.tag = {
-                icon: '',
             }
         }
     }

@@ -1,7 +1,7 @@
 import Server from './http'
 
 // 获取分类
-export function getArticles() {
+export function getCategorys() {
   return Server({
     url: '/api/blog/category',
     method: 'GET'
@@ -15,6 +15,44 @@ export function getTags() {
     method: 'GET'
   })
 }
+
+// 获取热门文章
+export function getHots() {
+  return Server({
+    url: '/api/blog/hot',
+    method: 'GET'
+  })
+}
+
+// 获取归档
+export function getArchive() {
+  return Server({
+    url: '/api/blog/archive',
+    method: 'GET'
+  })
+}
+
+// _______文章__________________________ //
+
+// 获取全部文章列表
+export function getArticleList(data) {
+  return Server({
+    url: '/api/blog/article',
+    method: 'POST',
+    data: data
+  })
+}
+
+// 获取文章内容
+export function getArticleContent(data) {
+  return Server({
+    url: '/api/blog/article/uuid',
+    method: 'POST',
+    data: data
+  })
+}
+
+// _______留言墙______________________ //
 
 // 留言墙 -- 添加留言
 export function addGuestbook(data) {

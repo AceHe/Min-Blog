@@ -2,22 +2,32 @@
     <footer class="footer">
         <div class="wrapper">
             <div class="copyright">
-                <span>版权所有 © {{ new Date() }} <nuxt-link to="/about">小何才露尖尖角</nuxt-link>. 保留所有权利</span>
-                <!-- <a href="http://www.miitbeian.gov.cn" target="_blank" rel="noopener" class="record">豫ICP备17040457号</a> -->
+                <span> 版权所有 © {{ new Date() | dateFormat }} 
+                    <nuxt-link to="/about">Ace·Hemin</nuxt-link>. 保留所有权利
+                </span>
+                <!-- <a href="https://github.com/AceHe" target="_blank" rel="noopener" class="record">Github</a> -->
             </div>
             <div class="power-by">
                 Powered by
                 <a class="link" target="_blank" rel="noopener" href="https://github.com/nuxt/nuxt.js">Nuxt.js</a>、
                 Design by
-                <a class="link" target="_blank" rel="noopener" :href="'https://github.com/AceHe'">AceHe</a>
+                <a class="link" target="_blank" rel="noopener" :href="'https://jooger.me'">jooger.me</a>
             </div>
         </div>
     </footer>
 </template>
 
 <script>
+    import { parseTime } from '@/utils/filters'
+
     export default {
-        name: 'Footer'
+        name: 'Footer',
+        filters: {
+            dateFormat(value) {
+                if (!value) return ''
+                return parseTime(value, '{y}')
+            }
+        }
     }
 </script>
 

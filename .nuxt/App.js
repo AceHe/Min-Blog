@@ -7,8 +7,9 @@ import '..\\assets\\style\\index.styl'
 
 
 import _6f6c098b from '..\\layouts\\default.vue'
+import _77430317 from '..\\layouts\\empty.vue'
 
-const layouts = { "_default": _6f6c098b }
+const layouts = { "_default": _6f6c098b,"_empty": _77430317 }
 
 
 

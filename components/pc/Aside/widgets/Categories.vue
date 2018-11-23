@@ -18,38 +18,17 @@
 <script>
     import Card from '@/components/common/Card'
 
+    import { mapGetter } from 'vuex'
+
     export default {
         name: 'Categories',
         components: {
             Card
         },
-        data(){
-            return {
-                categoryList: []
+        computed: {
+            categoryList () { 
+                return this.$store.getters['article/category']
             }
-        },
-        created(){
-            this.categoryList = [{
-                _id: 0,
-                name: '戎马一生',
-                icon: 'code',
-                count: 10,
-            },{
-                _id: 1,
-                name: '玩乐',
-                icon: 'life',
-                count: 2,
-            },{
-                _id: 2,
-                name: '随笔',
-                icon: 'think',
-                count: 5,
-            },{
-                _id: 3,
-                name: '笔记',
-                icon: 'read',
-                count: 12,
-            }]
         }
     }
 </script>

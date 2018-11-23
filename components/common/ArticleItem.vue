@@ -1,7 +1,7 @@
 <template>
     <article class="article-item" :class="{ 'no-desc': !article.description }" :title="article.title">
 
-        <nuxt-link class="article-link" :to="`/article/${article._id}`">
+        <nuxt-link class="article-link" :to="`/article/${article.uuid}`">
             <h3 class="title" v-html="title">{{ article.title }}</h3>
             <div class="summary">
                 <div class="thumb" v-if="article.thumb">
@@ -14,8 +14,8 @@
         <div class="status">
             <div class="meta">
                 <div class="meta-item category">
-                    <i class="icon" v-if="article.category" :class="[`icon-${article.icon}`]"></i>
-                    {{ article.category ? article.category.name : '暂未分类' }}
+                    <i class="icon" v-if="article.category.name" :class="[`icon-${article.category.icon}`]"></i>
+                    {{ article.category.name ? article.category.name : '暂未分类' }}
                 </div>
                 <template>
                     <div class="meta-item pvs">
@@ -34,13 +34,13 @@
                 <i class="icon icon-time"></i>
                 {{ article.createdAt | dateFormat }}
             </time>
-            <div class="source" :class="['translate']">{{ article.source }}</div>
+            <div class="source" :class="[getConstantItem(article.source)]">{{ article.source | constantFilter }}</div>
         </div>
     </article>
 </template>
 
 <script>
-    import { dateFormat } from '@/utils/filters'
+    import { parseTime, constantFilter } from '@/utils/filters'
 
     export default {
         name: 'ArticleItem',
@@ -53,7 +53,11 @@
         filters: {
             dateFormat(value) {
                 if (!value) return ''
-                return dateFormat(value)
+                return parseTime(value, '{y}-{m}-{d}')
+            },
+            constantFilter(value) {
+                if (!value) return ''
+                return constantFilter(value)
             },
         },
         created(){
@@ -65,6 +69,11 @@
                     return this.article.title.replace(new RegExp(this.keyword, 'g'), `<span class="keyword">${this.keyword}</span>`)
                 }
                 return this.article.title
+            },
+            getConstantItem(source){
+                if( source == 1 ) return 'translate';
+                if( source == 2 ) return 'reprint';
+                if( source == 3 ) return 'original';
             }
         }
     }

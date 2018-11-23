@@ -2,7 +2,7 @@
     <Card class="message-item" :class="{ 'identified': user && message.author.uuid === user.uuid }">
         <no-ssr>
             <transition name="fade">
-                <span class="tag" v-if="user && message.author.uuid === user.uuid">我</span>
+                <span class="tag" v-if="user && message.author.uuid === user.uuid">Ace</span>
             </transition>
         </no-ssr>
         <a class="user" :href="message.author.site || 'javascript:;'" target="_blank">
@@ -15,7 +15,7 @@
                 :class="{ 'liked': isLiked, liking }"
                 style="-webkit-background-clip: text;"
                 :title="isLiked ? '已点赞' : ''"
-                @click="like(message)">
+                @click="setLike(message)">
                 <i class="icon icon-like-fill"></i>
                 <span class="count" v-if="message.ups">{{ message.ups }}</span>
             </a>
@@ -28,8 +28,8 @@
 
 <script>
     import Card from '@/components/common/Card'
-    import { parseTime, countFilter } from '@/utils/filters'
-    import { mapActions } from 'vuex'
+    import { parseTime } from '@/utils/filters'
+    import { mapActions, mapGetters } from 'vuex'
 
     import { setGuestbookLike } from '@/api/index'
 
@@ -46,34 +46,49 @@
                 },
                 isLiked: false,
                 liking: false,
+
+                isHasLike: false,
             }
         },
         filters: {
             dateFormat: function (value) {
                 if (!value) return ''
                 return parseTime(value)
-            },
-            countFilter: function (value) {
-                if (!value) return ''
-                return countFilter(value)
             }
         },
+        created(){
+            this.getLike();
+        },
         methods: {
-            async like (message) {
-                if( this.isLiked || this.liking) return;
+            // 判断是否已点赞留言
+            async getLike () {
+                const res = await this.$store.dispatch('comments/getLike');
+                if( res && res.indexOf(this.message.uuid) != -1 ){
+                    this.isLiked = true;
+                    this.liking = true;
+                }
+            },
+
+            // 点赞留言
+            async setLike (message) {                
+                if( this.isLiked || this.liking){
+                    return this.$notify({
+                        group: 'auth',
+                        type: 'warn',
+                        text: '您已点过赞了！'
+                    });
+                } 
 
                 let data = {
                     uuid: message.uuid,
                     ups: message.ups
                 }
-                const promise = this.$store.dispatch('comments/like', data);
-                promise.then(res=>{
-                    console.log( 'res',res )
-                })
-                
-                this.isLiked = true;
-                this.liking = true;
-                this.$emit( 'updataLike', message.uuid, message.index);
+                const res = await this.$store.dispatch('comments/setLike', data);
+                if( res.code == 0 ){
+                    this.isLiked = true;
+                    this.liking = true;
+                    this.$emit( 'updataLike', message.uuid, message.index);
+                }
             }
         }
     }

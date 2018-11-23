@@ -94,10 +94,10 @@
                     site: this.site,
                     content: this.content
                 }
-
                 const res = await addGuestbook(data);
-
-                this.$emit( 'addGuesbook' );
+                if( res.data.code == 0 ){
+                    this.$emit( 'addGuesbook' );
+                }                
             }
         }
     }

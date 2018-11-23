@@ -19,18 +19,18 @@
 							<h3 class="year">{{ archive.year }}</h3>
 							<ul class="list month-list">
 								<li class="month-item"  v-for="month in archive.months" :key="month.month">
-									<h4 class="month">{{ month.monthStr }}</h4>
+									<h4 class="month">{{ month.monthStr | monthFilter }}</h4>
 									<ul class="list article-list">
 										<li class="article-item" v-for="article in month.articles" :key="article._id">
 											<article class="article">
 												<time class="time" :datatitme="article.createdAt">
 													{{ article.createdAt }}
 												</time>
-												<span class="source" :class="['translate']">
-													{{ article.source }}
+												<span class="source" :class="[getConstantItem(article.source)]">
+													{{ article.source | constantFilter }}
 												</span>
 												<nuxt-link class="link"
-													:to="`/article/${article._id}`">
+													:to="`/article/${article.uuid}`">
 													{{ article.title }}
 												</nuxt-link>
 											</article>
@@ -48,7 +48,9 @@
 
 <script>
 	import Card  from '@/components/common/Card'
-	import { dateFormat } from '@/utils/filters'
+	import { monthFilter, constantFilter } from '@/utils/filters'
+
+	import { getArchive } from '@/api/index'
 
 	export default {
 		name: 'Archive',
@@ -56,15 +58,19 @@
 			Card
 		},
 		filters: {
-            dateFormat(value) {
+            monthFilter(value) {
                 if (!value) return ''
-                return dateFormat(value)
-            }
+                return monthFilter(value)
+            },
+            constantFilter(value) {
+                if (!value) return ''
+                return constantFilter(value)
+            },
         },
 		data(){
 			return {
 				archives: [],
-				archivesCount: 10,
+				archivesCount: 0,
 				archivesFetching: false,
 			}
 		},
@@ -72,47 +78,25 @@
 			return {
 				title: '归档'
 			}
-		},		
+		},
 		created(){
-			this.archives = [{
-				year: '2018',
-				months: [{
-					month: '9',
-					monthStr: 'September',
-					articles: [{
-						_id: 0,
-						createdAt: '10-20',
-						source: '原创',
-						title: '挑剔挑剔标题碧桃i',
-					}]
-				},{
-					month: '8',
-					monthStr: 'August',
-					articles: [{
-						_id: 0,
-						createdAt: '10-20',
-						source: '原创',
-						title: '挑剔挑剔标题碧桃i',
-					}]
-				}]
-			},{
-				year: '2017',
-				months: [{
-					month: '9',
-					monthStr: 'September',
-					articles: [{
-						_id: 0,
-						createdAt: '11-21',
-						source: '转载',
-						title: '挑剔士大夫挑剔标题碧桃i',
-					},{
-						_id: 1,
-						createdAt: '11-20',
-						source: '转载',
-						title: '挑剔标题碧桃i',
-					}]
-				}]
-			}]
+			this.getArchive();
+		},
+		methods: {
+			async getArchive() {
+				const res = await getArchive();
+				if( res.data.code == 0 ){
+                    this.archives = res.data.data;
+                    this.archivesCount = res.data.total;
+                }else{
+                    console.log('ip', res.data)
+                }
+			},
+			getConstantItem(source){
+                if( source == 1 ) return 'translate';
+                if( source == 2 ) return 'reprint';
+                if( source == 3 ) return 'original';
+            }
 		}
 	}
 </script>

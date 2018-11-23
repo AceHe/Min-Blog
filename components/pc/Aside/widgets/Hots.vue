@@ -7,12 +7,12 @@
         <ul class="hot-list" v-if="hotList.length">
             <li class="hot-item"
                 v-for="(item, index) in hotList"
-                :key="item._id"
+                :key="item.uuid"
                 :title="item.title">
             <span class="index">{{ index + 1 }}</span>
             <nuxt-link
                 class="title"
-                :to="`/article/${item._id}`"
+                :to="`/article/${item.uuid}`"
                 :title="item.title">{{ item.title }}</nuxt-link>
             </li>
         </ul>
@@ -23,27 +23,17 @@
 <script>
     import Card from '@/components/common/Card'
 
+    import { mapGetter } from 'vuex'
+
     export default {
         name: 'Hots',
         components: {
             Card
         },
-        data(){
-            return{
-                hotList: []
+        computed: {
+            hotList () { 
+                return this.$store.getters['article/hot']
             }
-        },
-        created(){
-            this.hotList = [{
-                _id: 0,
-                title: '撒地方阿斯蒂'
-            },{
-                _id: 1,
-                title: '去微软为其阿斯蒂'
-            },{
-                _id: 2,
-                title: '一题一题一沙发'
-            }];
         }
     }
 </script>

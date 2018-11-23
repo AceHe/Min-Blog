@@ -4,7 +4,7 @@
         <div class="article-widget">
             <Card class="article-detail">
                 <article class="article" v-if="article">
-                    <span class="source original">{{ article.source | constantFilter }}</span>
+                    <span class="source" :class="[getConstantItem(article.source)]">{{ article.source | constantFilter }}</span>
                     <h2 class="title">{{ article.title }}</h2>
                     <div class="meta">
                         <nuxt-link :to="`/category/${article.category.name}`" class="meta-item category">
@@ -31,7 +31,7 @@
                         v-html="article.renderedContent"></div>
 
                     <div class="article-info">
-                        <div class="from" v-if="[1, 3].includes(article.source) && article.from">
+                        <div class="from" v-if="[2, 3].includes(article.source) && article.from">
                             原文链接：
                             <a :href="article.from" target="_blank">{{ article.from }}</a>
                         </div>
@@ -50,7 +50,7 @@
 
                     <div class="tags">
                         <Tag v-for="tag in article.tag"
-                            :key="tag._id"
+                            :key="tag.uuid"
                             :name="tag.name"
                             :icon="tag.icon || 'tag'"
                             :link="true">
@@ -69,7 +69,12 @@
     import Card  from '@/components/common/Card'
     import Tag from '@/components/common/Tag'
 
-    import { dateFormat, constantFilter } from '@/utils/filters'
+    import { parseTime, constantFilter } from '@/utils/filters'
+    import { getScroll } from '@/utils/dom'
+
+    import { mapActions } from 'vuex'
+
+    import { getArticleContent } from '@/api/index'
 
     export default {
         name: 'ArticleDetail',
@@ -77,10 +82,15 @@
             Card,
             Tag
         },
+        computed: {
+            showArticleTitle () { 
+                return this.$store.state.app.showArticleTitle 
+            }
+        },
         filters: {
             dateFormat(value) {
                 if (!value) return ''
-                return dateFormat(value)
+                return parseTime(value)
             },
             constantFilter(value) {
                 if (!value) return ''
@@ -90,8 +100,13 @@
         data(){
             return {
                 article: {},
-                articleFontSize: 16
+                articleFontSize: 16,
+
+                scrollTop: 0
             }
+        },
+        validate ({ params }) {
+            return !!params.id
         },
         head () {
             const data = this.article || {};
@@ -108,34 +123,50 @@
                 }]
             }
         },
+        async asyncData ({ params }) {
+            let opt = { uuid: params.id }
+            let { data } = await getArticleContent(opt);
+            return { article: data.data }
+        },
         created(){
-            this.article = {
-                source: 1,
-                title: '标题碧桃i他',
-                name: 'ace',
-                category: {
-                    name: '戎马一生',
-                    icon: 'code'
-                },
-                meta: {
-                    comments: 10,
-                    ups: 6,
-                    pvs: 32
-                },
-                renderedContent: '<p>Hello World</p>',
-                thumb: 'https://static.jooger.me/img/source/20180927/nuxt2.0.png?x-oss-process=style/banner',
-                from: 'www.baidu.com',
-                createdAt: '2018',
-                updatedAt: '2018',
-                tag: [{
-                    _id: 0,
-                    name: 'Vue',
-                    icon: ''
-                },{
-                    _id: 1,
-                    name: 'Js',
-                    icon: 'js'
-                }]
+            this.setTitle();
+        }, 
+        mounted (){
+            window.addEventListener('scroll', this.handleScroll);
+        },
+        beforeDestroy (){
+            window.removeEventListener('scroll', this.handleScroll);
+        },
+        methods: {
+
+            async setTitle () {
+                await this.$store.dispatch('article/setTitle', this.article.title);
+            },
+
+            handleScroll(){
+                const scrollTop = getScroll(document.body, true);
+
+                if (scrollTop < 80) {
+                    this.scrollTop = scrollTop
+                    if (this.showArticleTitle) {
+                        this.$store.commit('app/SET_ARTICLE_TITLE_VISIBLE', false)
+                    }
+                    return
+                }
+
+                if (scrollTop > this.scrollTop && !this.showArticleTitle) {
+                    this.$store.commit('app/SET_ARTICLE_TITLE_VISIBLE', true)
+                } else if (this.scrollTop > scrollTop  && this.showArticleTitle) {
+                    this.$store.commit('app/SET_ARTICLE_TITLE_VISIBLE', false)
+                }
+
+                this.scrollTop = scrollTop
+            },
+
+            getConstantItem(source){
+                if( source == 1 ) return 'translate';
+                if( source == 2 ) return 'reprint';
+                if( source == 3 ) return 'original';
             }
         }
     }

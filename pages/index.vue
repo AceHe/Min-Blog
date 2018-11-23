@@ -29,7 +29,7 @@
 	import Card  from '@/components/common/Card'
 	import ArticleList from '@/components/common/ArticleList'
 
-    import { getArticles } from '@/api/index'
+	import { mapGetter } from 'vuex'
 
 	export default {
 		name: 'Index',
@@ -42,22 +42,9 @@
 				title: '小何才露尖尖角 - 代码'
 			}
 		},
-		data(){
-			return {
-				categoryList: []
-			}
-		},
-		created(){
-			this.getCategory()
-		},
-		methods: {
-            async getCategory() {
-                const res = await getArticles();
-                if( res.data.code == 0 ){
-                	this.categoryList = res.data.data;
-                }else{
-                	console.log('ip', res.data)
-                }
+		computed: {
+            categoryList () { 
+                return this.$store.getters['article/category']
             }
         }
 	}

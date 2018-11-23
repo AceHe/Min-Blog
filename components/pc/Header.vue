@@ -5,7 +5,8 @@
 				<span class="logo-text">小何才露尖尖角</span>
 			</router-link>
             <transition name="slide-down" mode="out-in">
-            	<Tab class="menus" ref="menu"></Tab>
+            	<Tab class="menus" ref="menu" v-if="!showArticleTitle"></Tab>
+            	<div class="article-title" v-else>{{ articleTitle }}</div>
             </transition>
             <div class="search">
                 <input type="text" autocomplete="off" placeholder="搜索文章" :autofocus="false" v-model.trim="keyword" @keyup.enter="search">
@@ -19,11 +20,20 @@
 
 <script>
 	import Tab from '~/components/common/Tab'
+	import { mapGetter, mapActions } from 'vuex'
 
 	export default {
 	    name: 'PCHeader',
 	    components: {
 			Tab
+		},
+		computed: {
+			showArticleTitle () { 
+				return this.$store.state.app.showArticleTitle 
+			},
+			articleTitle () {
+				return this.$store.state.article.title
+			}
 		},
 	    data() {
 	        return {
@@ -31,6 +41,7 @@
 	        }
 	    },
 	    methods: {
+
 	        // 搜索文章
 	        search() {
 				if(this.keyword) {
@@ -46,21 +57,26 @@
 	@import '~@/assets/style/init'
 
 	.header {
-		position fixed 
-		width 100% 
-		height 60px 
-		background-color var(--card-color) 
-		box-shadow 0px 0px 14px 2px var(--box-shadow-color) 
-		z-index 99 
-		
+		position fixed
+		width 100%
+		height 60px
+		background-color var(--card-color)
+		box-shadow 0px 0px 14px 2px var(--box-shadow-color)
+		z-index 99
+
 		.wrapper {
-			flexLayout(, flex-start) 
-			display flex 
-			max-width 1088px 
-			height 100% 
+			flexLayout(, flex-start)
+			display flex
+			max-width 1088px
+			height 100%
 			margin 0 auto
 		}
-		
+
+		.header-info {
+			flex 1 0
+			flexLayout(, flex-start)
+		}
+
 		.logo {
 			flexLayout(, flex-start)
 			font-family $font-family-logo
@@ -78,7 +94,15 @@
 				color var(--text-color)
 			}
 		}
-		
+
+		.article-title {
+			flex 1 0
+			margin-left $padding-md
+			padding 0 $padding-sm
+			font-size 20px
+			font-weight 700
+		}
+
 		.menus {
 			flex 1 0
 			position relative
@@ -101,7 +125,7 @@
 				}
 			}
 		}
-	    
+
 		.search {
 			display flex
 			width 250px

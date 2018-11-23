@@ -7,10 +7,6 @@ export const state = () => ({
 	guesbookLike: []
 })
 
-export const getters = {
-	guesbookLike: state => state.guesbookLike,
-}
-
 export const mutations = {
 	SET_GUESBOOK_LIKE (state, data) {
 		state.guesbooklike = data

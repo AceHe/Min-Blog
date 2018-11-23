@@ -30,6 +30,9 @@
             Card,
             ArticleList
         },
+        validate ({ params }) {
+            return !!params.keyword
+        },
         head () {
             return {
                 title: `${this.$route.params.keyword} | Search`

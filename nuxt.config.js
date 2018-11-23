@@ -62,6 +62,8 @@ module.exports = {
 
     plugins: [
         { src: '@/plugins/count-to', ssr: false },
+        { src: '@/plugins/notification', ssr: true },
+        { src: '@/plugins/particles', ssr: false },
         { src: '@/plugins/router', ssr: false },
     ],
 

@@ -1,7 +1,7 @@
 <template>
 	<section class="about-page">
 		<div class="base-info">
-			<img class="avatar" src="https://avatars1.githubusercontent.com/u/16385416?v=4" alt="ace">
+			<img class="avatar" src="https://avatars1.githubusercontent.com/u/16385416?v=4" alt="Ace·Hemin">
 			<h1 class="name">Ace·Hemin</h1>
 			<p class="slogan">吃喝玩乐</p>
 		</div>

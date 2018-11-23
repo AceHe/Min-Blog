@@ -1,14 +1,14 @@
 <template>
     <section class="category-page">
         <div class="info">
-            <img class="background" :src="category.image" alt="">
+            <img class="background" :src="category.img" alt="">
             <div class="mask"></div>
             <div class="content">
                 <i class="icon" :class="[`icon-${category.icon}`]"></i>
                 <h3 class="name">{{ category.name }}</h3>
                 <div class="count">
                     共搜索到
-                    <em class="num">10</em>
+                    <em class="num">{{ category.count }}</em>
                     篇文章
                 </div>
             </div>
@@ -29,21 +29,24 @@
             Card,
             ArticleList
         },
-        data () {
-            return {
-                category: {}
+        computed: {
+            category () { 
+                let categoryList = this.$store.getters['article/category'];
+                let obj = {};
+                for( let item of categoryList ){
+                    if( item.name === this.$route.params.name ){
+                        obj = item;
+                    }
+                }
+                return obj
             }
+        },
+        validate ({ params }) {
+            return !!params.name
         },
         head () {
             return {
                 title: `${this.$route.params.name} | Category`
-            }
-        },
-        created(){
-            this.category = {
-                image: 'https://static.jooger.me/img/common/category/coding_1538902881058.png',
-                icon: 'code',
-                name: '戎码一生',
             }
         }
     }

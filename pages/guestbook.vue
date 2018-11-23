@@ -7,7 +7,7 @@
 				style="box-shadow: none;" 
 				ref="inputBox" 
 				is-message
-				@addGuesbook="getGuestbook"></CommentInputBox>
+				@addGuesbook="handleAddGuesbook"></CommentInputBox>
 		</Modal>
 
 		<div class="submit-field">
@@ -79,7 +79,7 @@
 				guesbookTotal: 0, // 总留言条数
 
 				page: 1,
-				limt: 4,
+				limt: 9,
 
 				showInputBox: false,	
 			}
@@ -129,7 +129,9 @@
 						item.index = 2;
 						this.columnData[2].push( item )
 					}
-				}
+				};
+
+				this.changeBoxState()
             },
 
 			// opne Modal
@@ -156,6 +158,14 @@
 					}
 				}
 			},
+
+			// 发表留言
+			handleAddGuesbook(){
+				this.page = 1;
+				this.columnCount= 0;
+				this.columnData = [[],[],[]];
+				this.getGuestbook();
+			}
 
 		}
 	}

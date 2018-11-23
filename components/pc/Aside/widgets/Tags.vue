@@ -20,7 +20,7 @@
     import Card from '@/components/common/Card'
     import Tag from '@/components/common/Tag'
 
-    import { getTags } from '@/api/index'
+    import { mapGetter } from 'vuex'
 
     export default {
         name: 'Tags',
@@ -28,22 +28,9 @@
             Card,
             Tag
         },
-        data(){
-            return{
-                tagList: []
-            }
-        },
-        created(){
-            this.getTag();
-        },
-        methods: {
-            async getTag() {
-                const res = await getTags();
-                if( res.data.code == 0 ){
-                    this.tagList = res.data.data;
-                }else{
-                    console.log('ip', res.data)
-                }
+        computed: {
+            tagList () { 
+                return this.$store.getters['article/tag']
             }
         }
     }

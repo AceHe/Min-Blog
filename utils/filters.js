@@ -1,7 +1,3 @@
-export function dateFormat() {
-    return '2018-11-11'
-}
-
 export function parseTime(time, cFormat) {
     if (arguments.length === 0) {
         return null
@@ -12,7 +8,7 @@ export function parseTime(time, cFormat) {
         date = time
     } else {
         if (('' + time).length === 10) time = parseInt(time) * 1000
-        date = new Date(parseInt(time))
+        date = new Date( parseInt(time) )
     }
     const formatObj = {
         y: date.getFullYear(),
@@ -38,6 +34,22 @@ export function countFilter() {
     return 2
 }
 
-export function constantFilter() {
-    return '原创'
+export function constantFilter(value) {
+    if( value == 1 ) return '原创';
+    if( value == 2 ) return '转载';
+}
+
+export function monthFilter(value) {
+    if( value == 1 ) return 'January';
+    if( value == 2 ) return 'February';
+    if( value == 3 ) return 'March';
+    if( value == 4 ) return 'April';
+    if( value == 5 ) return 'May';
+    if( value == 6 ) return 'June';
+    if( value == 7 ) return 'July';
+    if( value == 8 ) return 'August';
+    if( value == 9 ) return 'September';
+    if( value == 10 ) return 'October';
+    if( value == 11 ) return 'November';
+    if( value == 12 ) return 'December';
 }
