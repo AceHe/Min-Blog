@@ -26,9 +26,20 @@
                 placeholder: '写点什么'
             }
         },
+        mounted(){
+            if (this.from() === 'about') {
+                this.value = `友链申请\n称呼：\n网站：\nGithub(如果有)：\n`
+            }
+        },
         methods: {
             handleValueChange (e) {
                 this.$emit('input', e.target.value.trim())
+            },
+            from () {
+                return this.$route.query.from
+            },
+            focus () {
+                this.$refs.input.focus()
             }
         }
     }

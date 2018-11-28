@@ -5,15 +5,15 @@
 			@changeBoxState='changeBoxState'>
 			<CommentInputBox 
 				style="box-shadow: none;" 
-				ref="inputBox" 
-				is-message
+				ref="inputBox"
+				:is-message="true"
 				@addGuesbook="handleAddGuesbook"></CommentInputBox>
 		</Modal>
 
 		<div class="submit-field">
 			<div class="welcome">
 				<i class="icon icon-quote-up"></i>
-				人的平均寿命77岁，一共28105天，67w小时，4047w分钟，24亿秒左右，这10秒你在读这段话，这10秒你属于我。你好陌生人，我爱你 ❤️
+				有故事的人说着他自己的故事，坐在他跟前的人喝着咖啡看着窗外，等他说完，深情看一眼，这是简称倾听者的路人。 ❤️
 				<i class="icon icon-quote-down"></i>
 			</div>
 			<div class="submit">
@@ -102,8 +102,19 @@
 			// 留言墙列表 初始化
 			this.columnData = [[],[],[]];
 
-			this.getGuestbook();
+			// this.getGuestbook();
 
+		},
+		mounted(){
+			if (this.from() === 'about') {
+				console.log( 'this.from()',this.from() )
+				this.openBox()
+				this.$nextTick(() => {
+					let inputBox = this.$refs.inputBox;
+					inputBox.content = `友链申请\n称呼：\n网站：\nGithub(如果有)：\n`
+					inputBox.focus();
+				})
+			}
 		},
 		methods: {
 			// 获取留言墙列表
@@ -165,6 +176,10 @@
 				this.columnCount= 0;
 				this.columnData = [[],[],[]];
 				this.getGuestbook();
+			},
+
+			from () {
+			    return this.$route.query.from
 			}
 
 		}

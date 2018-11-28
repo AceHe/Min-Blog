@@ -1,9 +1,9 @@
 <template>
 	<section class="about-page">
 		<div class="base-info">
-			<img class="avatar" src="https://avatars1.githubusercontent.com/u/16385416?v=4" alt="Ace·Hemin">
-			<h1 class="name">Ace·Hemin</h1>
-			<p class="slogan">吃喝玩乐</p>
+			<img class="avatar" :src="websiteInfo.avatar" :alt="websiteInfo.userName">
+			<h1 class="name">{{ websiteInfo.userName }}</h1>
+			<p class="slogan">{{ websiteInfo.slogan }}</p>
 		</div>
 		<div class="block">
 			<div class="column column-left">
@@ -12,27 +12,23 @@
 					<ul class="detail-list">
 						<li class="detail-item description">
 							<i class="icon icon-about"></i>
-							<p class="content">111111111111</p>
+							<p class="content">{{ websiteInfo.intro }}</p>
 						</li>
 						<li class="detail-item hobby">
 							<i class="icon icon-like-fill"></i>
-							<p class="content">22222222222</p>
+							<p class="content">{{ websiteInfo.hobby }}</p>
 						</li>
 						<li class="detail-item skill">
 							<i class="icon icon-skill"></i>
-							<p class="content">33333333333</p>
+							<p class="content">{{ websiteInfo.skills }}</p>
 						</li>
 						<li class="detail-item tag">
 							<i class="icon icon-tag"></i>
-							<p class="content">44444444444</p>
+							<p class="content">{{ websiteInfo.tag }}</p>
 						</li>
 						<li class="detail-item location">
 							<i class="icon icon-location"></i>
-							<p class="content">5555555555</p>
-						</li>
-						<li class="detail-item company">
-							<i class="icon icon-company"></i>
-							<p class="content">6666666666</p>
+							<p class="content">{{ websiteInfo.address }}</p>
 						</li>
 					</ul>
 				</Card>
@@ -58,12 +54,12 @@
 				<Card class="github-follow">
 					<div class="status">
 						<div class="follower">
-							<CountTo :start-val="0" :end-val="80" :duration='2000' separator="," class="count"></CountTo>
+							<CountTo :start-val="0" :end-val="websiteInfo.follower" :duration='2000' separator="," class="count"></CountTo>
 							<div class="label">Follower</div>
 						</div>
 						<span class="divider"></span>
 						<div class="following">
-							<CountTo :start-val="0" :end-val="160" :duration='2000' separator="," class="count"></CountTo>
+							<CountTo :start-val="0" :end-val="websiteInfo.following" :duration='2000' separator="," class="count"></CountTo>
 							<div class="label">Following</div>
 						</div>
 					</div>
@@ -72,7 +68,7 @@
 				<Card class="social">
 					<h2 class="title">Contacts</h2>
 					<ul class="social-list">
-						<li class="social-item" v-for="social in socials" :key="social.icon">
+						<li class="social-item" v-for="social in websiteInfo.socals" :key="social.icon">
 							<a :href="social.icon === 'email' ? `mailto:${social.url}` : social.url" target="_blank" rel="noopener"
 								:class="social.icon"
 								:title="social.title">
@@ -83,7 +79,7 @@
 				</Card>
 				<Card no-padding class="position">
 					<h2 class="title">I'm Here</h2>
-					<iframe src="https://jooger.me/location/" frameborder="0"></iframe>
+					<iframe src="http://f.amap.com/5RwGU_0106bN7" frameborder="0"></iframe>
 				</Card>
 			</div>
 		</div>
@@ -109,36 +105,16 @@
 			store.commit('app/SET_FULL_COLUMN', true)
 			return Promise.resolve()
 		},
+		computed: {
+            websiteInfo () { 
+                return this.$store.getters['website/website']
+            },
+            friendLinks () { 
+                return this.$store.getters['website/friendlink']
+            }
+        },
 		data() {
 			return {
-				friendLinks: [{
-					_id: 0,
-					site: 'https://surmon.me/',
-					avatar: 'https://avatars1.githubusercontent.com/u/14019524?v=4',
-					name: 'Surmon',
-					slogan: 'Rover'
-				},{
-					_id: 1,
-					site: 'https://surmon.me/',
-					avatar: 'https://avatars1.githubusercontent.com/u/14019524?v=4',
-					name: 'Dfdhgdsg',
-					slogan: 'DF'
-				}],
-
-				socials: [{
-					icon: 'github',
-					url: 'https://github.com/jo0ger',
-					title: 'GitHub'
-				},{
-					icon: 'email',
-					url: 'https://github.com/jo0ger',
-					title: 'GitHub'
-				},{
-					icon: 'juejin',
-					url: 'https://github.com/jo0ger',
-					title: 'GitHub'
-				}]
-
 			}
 		}
 	}

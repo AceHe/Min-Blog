@@ -70,14 +70,13 @@
 
     export default {
         name: 'CommentInputBox',
+        props: ['isMessage', 'isChild'],
         components: {
             Card,
             MDEditor
         },
         data(){
             return {
-                isChild: true,
-                isMessage: true,
                 loading: false,
 
                 name: '',
@@ -98,6 +97,9 @@
                 if( res.data.code == 0 ){
                     this.$emit( 'addGuesbook' );
                 }                
+            },
+            focus () {
+                this.$refs.editor.focus()
             }
         }
     }

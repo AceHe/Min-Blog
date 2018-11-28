@@ -60,6 +60,8 @@
 			this.getCategory();
 			this.getTag();
 			this.getHot();
+			this.getWebsite();
+			this.getFriendLink();
 		},
 		methods:{
 			async getTheme () {
@@ -76,6 +78,14 @@
 
 			async getHot () {
 				await this.$store.dispatch('article/getHot');
+			},
+
+			async getWebsite () {
+				await this.$store.dispatch('website/getWebsite');
+			},
+
+			async getFriendLink () {
+				await this.$store.dispatch('website/getFriendLink');
 			}
 		}
 	}

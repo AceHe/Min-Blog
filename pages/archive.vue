@@ -86,8 +86,10 @@
 			async getArchive() {
 				const res = await getArchive();
 				if( res.data.code == 0 ){
-                    this.archives = res.data.data;
+                    // this.archives = res.data.data;
                     this.archivesCount = res.data.total;
+
+                    // this.dataOrganize( res.data.data )
                 }else{
                     console.log('ip', res.data)
                 }
@@ -96,7 +98,14 @@
                 if( source == 1 ) return 'translate';
                 if( source == 2 ) return 'reprint';
                 if( source == 3 ) return 'original';
-            }
+            },
+			sortByKey(array,key) {
+				return array.sort(function(a,b){
+					var x = a[key];
+					var y = b[key];
+					return ( (x>y) ? -1 : ( (x<y) ? 1 : 0 ) );
+				});
+			}
 		}
 	}
 </script>

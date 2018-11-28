@@ -1,5 +1,21 @@
 import Server from './http'
 
+// 获取网站配置
+export function getWebsite() {
+  return Server({
+    url: '/api/blog/website',
+    method: 'GET'
+  })
+}
+
+// 获取友情链接
+export function getFriendLink() {
+  return Server({
+    url: '/api/blog/friendlink',
+    method: 'GET'
+  })
+}
+
 // 获取分类
 export function getCategorys() {
   return Server({

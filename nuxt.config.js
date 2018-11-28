@@ -34,7 +34,7 @@ module.exports = {
             { hid: 'description', name: 'description', content: '小荷才露尖尖角' }
         ],
         link: [
-            { rel: 'stylesheet', type: 'text/css', href: '//fonts.googleapis.com/css?family=Damion' },
+            { rel: 'stylesheet', type: 'text/css', href: 'http://fonts.googleapis.com/css?family=Damion' },
         ]
     },
 
