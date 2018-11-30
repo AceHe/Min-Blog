@@ -6,7 +6,7 @@
             </transition>
         </no-ssr>
         <a class="user" :href="message.author.site || 'javascript:;'" target="_blank">
-            <img :src="message.author.avatar" :alt="message.author.name" class="avatar">
+            <img v-lazy="message.author.avatar" :alt="message.author.name" class="avatar">
             <span class="name">{{ message.author.name }}</span>
         </a>
         <div class="content markdown-body" style="font-size: 14px;" v-html="message.renderedContent"></div>

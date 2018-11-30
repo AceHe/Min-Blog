@@ -7,7 +7,7 @@
 				:key="item._id">
 				<router-link :to="`/category/${item.name}`">
 					<img class="background-image" v-if="item.img"
-						:src="item.img" alt="">
+						v-lazy="item.img" alt="">
 					<div class="background" :style="{
 						backgroundImage: `url(${item.img})`
 						}"></div>

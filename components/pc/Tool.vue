@@ -26,10 +26,14 @@
 		components: {
 			Card
 		},
+		computed: {
+			theme () { 
+				return this.$store.getters['app/theme']
+			}
+		},
 		data() {
 			return {
 				showScrollTop: false,
-				theme: 'light'
 			}
 		},
 		mounted () {
@@ -45,8 +49,8 @@
 			},
 
             async updateTheme (theme) {
-                const res = await this.$store.dispatch('app/updateTheme', theme);
-                this.theme = this.theme === 'light' ? 'dark' : 'light';
+            	console.log('theme', theme )
+                await this.$store.dispatch('app/updateTheme', theme);
             },
 
 			goTop () {

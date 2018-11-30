@@ -62,6 +62,7 @@
 			this.getHot();
 			this.getWebsite();
 			this.getFriendLink();
+			this.getArchive();
 		},
 		methods:{
 			async getTheme () {
@@ -86,6 +87,10 @@
 
 			async getFriendLink () {
 				await this.$store.dispatch('website/getFriendLink');
+			},
+
+			async getArchive () {
+				await this.$store.dispatch('archive/getArchive');
 			}
 		}
 	}

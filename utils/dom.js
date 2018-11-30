@@ -11,12 +11,27 @@ export const easing = {
 
 // 获取target的scroll top
 export const getScroll = (target, top) => {
-  const prop = top ? 'pageYOffset' : 'pageXOffset';
-  let ret = target[prop];
-  if (typeof ret !== 'number') {
-    ret = (window.document.documentElement)[top ? 'scrollTop' : 'scrollLeft'];
-  }
-  return ret
+	const prop = top ? 'pageYOffset' : 'pageXOffset';
+	let ret = target[prop];
+	if (typeof ret !== 'number') {
+		ret = (window.document.documentElement)[top ? 'scrollTop' : 'scrollLeft'];
+	}
+	return ret
+}
+
+// 获取element的offset
+export const getOffset = (element) => {
+	const rect = element.getBoundingClientRect();
+	const scrollTop = getScroll(window, true);
+	const scrollLeft = getScroll(window);
+	const docElem = window.document.body;
+	const clientTop = docElem.clientTop || 0; // 元素边框的厚度
+	const clientLeft = docElem.clientLeft || 0;
+
+	return {
+		top: rect.top + scrollTop - clientTop, // 元素距离顶部的高度
+		left: rect.left + scrollLeft - clientLeft //元素距离右边的宽度
+	}
 }
 
 export const scrollTo = (element, duration) => {

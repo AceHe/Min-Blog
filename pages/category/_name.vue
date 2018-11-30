@@ -1,7 +1,7 @@
 <template>
     <section class="category-page">
         <div class="info">
-            <img class="background" :src="category.img" alt="">
+            <img class="background" v-lazy="category.img" alt="">
             <div class="mask"></div>
             <div class="content">
                 <i class="icon" :class="[`icon-${category.icon}`]"></i>

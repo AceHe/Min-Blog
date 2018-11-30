@@ -1,7 +1,7 @@
 <template>
 	<section class="about-page">
 		<div class="base-info">
-			<img class="avatar" :src="websiteInfo.avatar" :alt="websiteInfo.userName">
+			<img class="avatar" v-lazy="websiteInfo.avatar" :alt="websiteInfo.userName">
 			<h1 class="name">{{ websiteInfo.userName }}</h1>
 			<p class="slogan">{{ websiteInfo.slogan }}</p>
 		</div>
@@ -37,7 +37,7 @@
 					<ul class="link-list">
 						<li class="link-item" v-for="link in friendLinks" :key="link._id">
 							<a :href="link.site || 'javascript:;'" target="_blank">
-								<img class="avatar" :src="link.avatar" :alt="link.name">
+								<img class="avatar" v-lazy="link.avatar" :alt="link.name">
 								<div class="info">
 									<h4 class="name">{{ link.name }}</h4>
 									<p class="slogan">{{ link.slogan }}</p>

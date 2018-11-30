@@ -1,3 +1,4 @@
+// 留言墙
 import localForage from "localforage";
 import { setGuestbookLike } from '@/api/index'
 
@@ -15,18 +16,18 @@ export const mutations = {
 
 export const actions = {
 	async setLike ({ commit, dispatch, rootState }, data) {
-		const res = await setGuestbookLike(data);
-		const getlocal = await localForage.getItem('GUESBOOK_LIKE');
+		let res = await setGuestbookLike(data);
+		let item = await localForage.getItem('GUESBOOK_LIKE');
 		let uuidArr = [];
-		if( getlocal ) uuidArr = getlocal;
+		if( item ) uuidArr = item;
 		uuidArr.push( data.uuid );
-		const setlocal = await localForage.setItem('GUESBOOK_LIKE', uuidArr);
+		await localForage.setItem('GUESBOOK_LIKE', uuidArr);
 		return res.data
 	},
 
 	async getLike ({ commit, dispatch, rootState }) {
-		const getlocal = await localForage.getItem('GUESBOOK_LIKE');
-		commit(SET_GUESBOOK_LIKE, getlocal)
-		return getlocal
+		let item = await localForage.getItem('GUESBOOK_LIKE');
+		commit(SET_GUESBOOK_LIKE, item)
+		return item
 	}
 }

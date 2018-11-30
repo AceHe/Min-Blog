@@ -5,7 +5,7 @@
             <h3 class="title" v-html="title">{{ article.title }}</h3>
             <div class="summary">
                 <div class="thumb" v-if="article.thumb">
-                    <img :src="article.thumb" alt="">
+                    <img v-lazy="article.thumb" alt="">
                 </div>
                 <p class="description">{{ article.description }}</p>
             </div>

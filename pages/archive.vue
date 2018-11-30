@@ -18,13 +18,13 @@
 						<li class="year-item" v-for="archive in archives" :key="archive.year">
 							<h3 class="year">{{ archive.year }}</h3>
 							<ul class="list month-list">
-								<li class="month-item"  v-for="month in archive.months" :key="month.month">
-									<h4 class="month">{{ month.monthStr | monthFilter }}</h4>
+								<li class="month-item" v-for="month in archive.months" :key="month.month">
+									<h4 class="month">{{ month.month | monthFilter }}</h4>
 									<ul class="list article-list">
-										<li class="article-item" v-for="article in month.articles" :key="article._id">
+										<li class="article-item" v-for="article in month.artic" :key="article.uuid">
 											<article class="article">
-												<time class="time" :datatitme="article.createdAt">
-													{{ article.createdAt }}
+												<time class="time" :datatitme="article.monthDay">
+													{{ article.monthDay }}
 												</time>
 												<span class="source" :class="[getConstantItem(article.source)]">
 													{{ article.source | constantFilter }}
@@ -49,8 +49,7 @@
 <script>
 	import Card  from '@/components/common/Card'
 	import { monthFilter, constantFilter } from '@/utils/filters'
-
-	import { getArchive } from '@/api/index'
+	import { sourceTranslate } from '@/utils/publicMethods'
 
 	export default {
 		name: 'Archive',
@@ -67,10 +66,16 @@
                 return constantFilter(value)
             },
         },
+        computed: {
+            archives () { 
+                return this.$store.getters['archive/archive']
+            },
+            archivesCount () {
+            	return this.$store.getters['archive/count']
+            }
+        },
 		data(){
 			return {
-				archives: [],
-				archivesCount: 0,
 				archivesFetching: false,
 			}
 		},
@@ -79,33 +84,10 @@
 				title: '归档'
 			}
 		},
-		created(){
-			this.getArchive();
-		},
 		methods: {
-			async getArchive() {
-				const res = await getArchive();
-				if( res.data.code == 0 ){
-                    // this.archives = res.data.data;
-                    this.archivesCount = res.data.total;
-
-                    // this.dataOrganize( res.data.data )
-                }else{
-                    console.log('ip', res.data)
-                }
-			},
 			getConstantItem(source){
-                if( source == 1 ) return 'translate';
-                if( source == 2 ) return 'reprint';
-                if( source == 3 ) return 'original';
-            },
-			sortByKey(array,key) {
-				return array.sort(function(a,b){
-					var x = a[key];
-					var y = b[key];
-					return ( (x>y) ? -1 : ( (x<y) ? 1 : 0 ) );
-				});
-			}
+                return sourceTranslate(source)
+            }
 		}
 	}
 </script>

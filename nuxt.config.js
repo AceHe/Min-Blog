@@ -34,7 +34,7 @@ module.exports = {
             { hid: 'description', name: 'description', content: '小荷才露尖尖角' }
         ],
         link: [
-            { rel: 'stylesheet', type: 'text/css', href: 'http://fonts.googleapis.com/css?family=Damion' },
+            { rel: 'stylesheet', type: 'text/css', href: '//fonts.loli.net/css?family=Damion' },
         ]
     },
 
@@ -61,7 +61,9 @@ module.exports = {
     },
 
     plugins: [
+        { src: '@/plugins/copyright', ssr: false },
         { src: '@/plugins/count-to', ssr: false },
+        { src: '@/plugins/lazyload', ssr: false },
         { src: '@/plugins/notification', ssr: true },
         { src: '@/plugins/particles', ssr: false },
         { src: '@/plugins/router', ssr: false },
@@ -69,6 +71,7 @@ module.exports = {
 
     modules: [
         '@nuxtjs/axios',
+        '@nuxtjs/localforage'
     ],
 
 }

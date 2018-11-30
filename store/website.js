@@ -1,4 +1,4 @@
-import localForage from "localforage";
+// 关于自己 & 友链
 import { getWebsite, getFriendLink } from '@/api/index'
 
 const SET_WEBSITE = 'SET_WEBSITE';

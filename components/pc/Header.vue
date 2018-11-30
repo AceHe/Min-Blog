@@ -29,10 +29,10 @@
 		},
 		computed: {
 			showArticleTitle () { 
-				return this.$store.state.app.showArticleTitle 
+				return this.$store.getters['app/showArticleTitle']
 			},
 			articleTitle () {
-				return this.$store.state.article.title
+				return this.$store.getters['article/title']
 			}
 		},
 	    data() {

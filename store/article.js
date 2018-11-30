@@ -44,7 +44,7 @@ export const actions = {
 	async setTitle ({ commit, state }, title) {
 		if (title) {
 			commit(SET_TITLE, title)
-			const setlocal = await localForage.setItem('TITLE_KEY', title);
+			await localForage.setItem('TITLE_KEY', title);
 		}
 	},
 
@@ -52,7 +52,6 @@ export const actions = {
 	async getCategory ({ commit, state }) {
 		const res = await getCategorys();
 		commit(SET_CATEGORY, res.data.data)
-		await localForage.setItem('CATEGORY_KEY', res.data.data);
 		return res;
 	},
 
@@ -60,7 +59,6 @@ export const actions = {
 	async getTag ({ commit, state }) {
 		const res = await getTags();
 		commit(SET_TAG, res.data.data)
-		await localForage.setItem('TAG_KEY', res.data.data);
 		return res;
 	},
 
@@ -68,7 +66,6 @@ export const actions = {
 	async getHot ({ commit, state }) {
 		const res = await getHots();
 		commit(SET_HOT, res.data.data)
-		await localForage.setItem('HOT_KEY', res.data.data);
 		return res;
 	}
 }

@@ -3,10 +3,12 @@
         <transition name="fade" mode="out-in">
             <Hots></Hots>
         </transition>
-        <transition name="fade" mode="out-in">
-            <Categories v-if="['archive', 'article-id', 'category-name', 'tag-name'].includes($route.name)"></Categories>
-        </transition>
-        <Tags></Tags>
+        <Affix offset-top="76">
+            <transition name="fade" mode="out-in">
+                <Categories v-if="['archive', 'article-id', 'category-name', 'tag-name'].includes($route.name)"></Categories>
+            </transition>
+            <Tags></Tags>
+        </Affix>
     </div>
 </template>
 
@@ -14,13 +16,15 @@
     import Hots from './widgets/Hots'
     import Tags from './widgets/Tags'
     import Categories from './widgets/Categories'
+    import Affix from '@/components/common/Affix'
 
     export default {
         name: 'Aside',
         components: {
             Hots,
             Categories,
-            Tags
+            Tags,
+            Affix
         }
     }
 </script>

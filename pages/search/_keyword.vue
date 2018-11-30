@@ -9,12 +9,12 @@
                 </div>
                 <div class="count">
                     共搜索到
-                    <em class="num">10</em>
+                    <em class="num">{{ total }}</em>
                     篇文章
                 </div>
             </div>
             <div class="list-content">
-                <ArticleList :keyword="$route.params.keyword"></ArticleList>
+                <ArticleList :keyword="$route.params.keyword" v-model="total"></ArticleList>
             </div>
         </Card>
     </section>
@@ -36,6 +36,11 @@
         head () {
             return {
                 title: `${this.$route.params.keyword} | Search`
+            }
+        },
+        data() {
+            return {
+                total: 0
             }
         }
     }

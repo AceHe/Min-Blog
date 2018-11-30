@@ -53,6 +53,18 @@
         mounted(){
             this.setCornerStyle()
         },
+        watch: {
+            '$route.name': function (newVal, oldVal) {
+                if (this.$router) {
+                    if (!this.list.find(item => item.key === newVal)) {
+                        this.menuValue = -1
+                    } else {
+                        this.init()
+                        this.setCornerStyle()
+                    }
+                }
+            }
+        },
         methods: {
             // 初始化
             init(){

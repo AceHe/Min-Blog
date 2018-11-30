@@ -102,7 +102,7 @@
 			// 留言墙列表 初始化
 			this.columnData = [[],[],[]];
 
-			// this.getGuestbook();
+			this.getGuestbook();
 
 		},
 		mounted(){

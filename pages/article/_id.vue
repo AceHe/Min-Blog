@@ -1,6 +1,12 @@
 <template>
     <section class="article-page">
-
+        <!-- <div class="action-widget" v-if="!mobileLayout">
+            <ReadTool
+                :article="article"
+                :liked="liked"
+                :liking="articleLiking"
+                @on-like="like"></ReadTool>
+        </div> -->
         <div class="article-widget">
             <Card class="article-detail">
                 <article class="article" v-if="article">
@@ -23,10 +29,11 @@
                     </div>
 
                     <div class="thumb" v-if="article.thumb">
-                        <img :src="article.thumb" alt="">
+                        <img v-lazy="article.thumb" alt="">
                     </div>
 
                     <div class="content markdown-body"
+                        v-copyright
                         :style="{ fontSize: articleFontSize + 'px' }"
                         v-html="article.renderedContent"></div>
 
@@ -84,7 +91,7 @@
         },
         computed: {
             showArticleTitle () { 
-                return this.$store.state.app.showArticleTitle 
+                return this.$store.getters['app/showArticleTitle']
             }
         },
         filters: {

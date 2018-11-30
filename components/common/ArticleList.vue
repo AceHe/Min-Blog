@@ -25,18 +25,17 @@
 
     export default {
         name: 'ArticleList',
+        props: ['mini', 'keyword'],
         components: {
             ArticleItem
         },
         data(){
             return{
                 articleList: [],
-                mini: 10,
-                keyword: 'code',
 
                 total: 0,
                 page: 1,
-                limt: 10
+                limt: 5
             }
         },
         created(){
@@ -64,8 +63,10 @@
                     data.key = 'tag';
                     data.val = this.$route.params.name;
                 }
-
-                console.log( 'data',data )
+                else if( name == 'search-keyword' ){
+                    data.key = 'search';
+                    data.val = this.$route.params.keyword;
+                }
 
                 const res = await getArticleList(data);
                 if( res.data.code == 0 ){
