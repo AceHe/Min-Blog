@@ -68,6 +68,55 @@ export function getArticleContent(data) {
   })
 }
 
+// 点赞文章
+export function setArticleLike(data) {
+  return Server({
+    url: '/api/blog/article/like',
+    method: 'POST',
+    data: data
+  })
+}
+
+
+// _______评论______________________ //
+
+// 发表 文章评论
+export function addArticleComment(data) {
+  return Server({
+    url: '/api/blog/comments',
+    method: 'POST',
+    data: data
+  })
+}
+
+// 点赞 文章评论
+export function setCommentLike(data) {
+  return Server({
+    url: '/api/blog/comments',
+    method: 'PUT',
+    data: data
+  })
+}
+
+// 回复 文章评论
+export function addArticleCommentReply(data) {
+  return Server({
+    url: '/api/blog/comments/reply',
+    method: 'POST',
+    data: data
+  })
+}
+
+// 点赞 评论回复
+export function setCommentReplyLike(data) {
+  return Server({
+    url: '/api/blog/comments/reply',
+    method: 'PUT',
+    data: data
+  })
+}
+
+
 // _______留言墙______________________ //
 
 // 留言墙 -- 添加留言

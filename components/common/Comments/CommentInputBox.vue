@@ -38,21 +38,33 @@
                     </div>
                 </div>
 
+                <transition name="fade" mode="out-in">
+                    <div class="reply" v-if="reply">
+                        <div class="target">
+                            正在回复：
+                            <a class="name" :href="reply.person.site || 'javascript:;'" target="_blank" rel="noopener">@{{ reply.person.name }}</a>
+                        </div>
+                        <div class="clear">
+                            <button @click="clearReply" title="取消回复">取消回复</button>
+                        </div>
+                    </div>
+                </transition>
 
                 <div class="content">
-                    <MDEditor class="editor" 
+                    <MDEditor
+                        class="editor" 
                         ref="editor" 
                         v-model="content"
-                        :disabled="false" 
-                        :rows="3" 
-                        :placeholder="'说点儿什么'">
+                        :disabled="loading"
+                        :rows="isChild ? 3 : mobileLayout ? 4 : 6"
+                        :placeholder="reply ? `回复@${reply.person.name}` : '说点儿什么'">
                     </MDEditor>
                 </div>
 
                 <div class="action">
                     <div class="action-item submit">
                         <button class="submit-btn" @click="submit">
-                            <span>留言</span>
+                            <span>{{ typeText }}</span>
                         </button>
                     </div>
                 </div>
@@ -66,14 +78,20 @@
     import Card  from '@/components/common/Card'
     import MDEditor  from '@/components/common/MDEditor'
 
-    import { addGuestbook } from '@/api/index'
-
     export default {
         name: 'CommentInputBox',
-        props: ['isMessage', 'isChild'],
+        props: ['isMessage', 'isChild', 'reply'],
         components: {
             Card,
             MDEditor
+        },
+        computed: {
+            mobileLayout(){
+                return this.$store.getters['app/mobileLayout']
+            },
+            typeText () {
+                return this.isMessage ? '留言' : this.isChild ? '回复' : '评论'
+            }
         },
         data(){
             return {
@@ -82,7 +100,7 @@
                 name: '',
                 email: '',
                 site: '',
-                content: ''
+                content: '',
             }
         },
         methods: {
@@ -91,16 +109,29 @@
                     name: this.name,
                     email: this.email,
                     site: this.site,
-                    content: this.content
+                    comment: this.content
                 }
-                const res = await addGuestbook(data);
-                if( res.data.code == 0 ){
-                    this.$emit( 'addGuesbook' );
-                }                
+
+                if ( this.isMessage ) {
+                    // 留言墙
+                    this.$emit('on-publish', data, 0)
+                } else if( this.isChild ){
+                    // 文章评论回复
+                    this.$emit('on-publish', data, 1)
+                }else{
+                    // 文章评论
+                    this.$emit('on-publish', data, 2)
+                }
             },
+
+            // 取消回复
+            clearReply() {
+                this.$emit('on-clear-reply')
+            },
+
             focus () {
                 this.$refs.editor.focus()
-            }
+            },
         }
     }
     

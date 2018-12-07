@@ -49,7 +49,6 @@
 			},
 
             async updateTheme (theme) {
-            	console.log('theme', theme )
                 await this.$store.dispatch('app/updateTheme', theme);
             },
 

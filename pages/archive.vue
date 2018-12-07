@@ -56,6 +56,16 @@
 		components: {
 			Card
 		},
+		layout({ store }) {
+			const mobileLayout = store.getters['app/mobileLayout'];
+			if (mobileLayout) return 'mobile';
+			return 'default';
+		},
+		head () {
+			return {
+				title: '归档'
+			}
+		},
 		filters: {
             monthFilter(value) {
                 if (!value) return ''
@@ -77,11 +87,6 @@
 		data(){
 			return {
 				archivesFetching: false,
-			}
-		},
-		head () {
-			return {
-				title: '归档'
 			}
 		},
 		methods: {
@@ -184,6 +189,10 @@
 					}
 				}
 			}
+		}
+		
+		.app.mobile-layout & {
+			width 100%
 		}
 	}
 </style>

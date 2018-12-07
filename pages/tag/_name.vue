@@ -30,6 +30,19 @@
             Card,
             ArticleList
         },
+        layout({ store }) {
+            const mobileLayout = store.getters['app/mobileLayout'];
+            if (mobileLayout) return 'mobile';
+            return 'default';
+        },
+        validate ({ params }) {
+            return !!params.name
+        },
+        head () {
+            return {
+                title: `${this.$route.params.name} | Tag`
+            }
+        },
         computed: {
             tag () { 
                 let tagList = this.$store.getters['article/tag'];
@@ -40,14 +53,6 @@
                     }
                 }
                 return obj
-            }
-        },
-        validate ({ params }) {
-            return !!params.name
-        },
-        head () {
-            return {
-                title: `${this.$route.params.name} | Tag`
             }
         }
     }

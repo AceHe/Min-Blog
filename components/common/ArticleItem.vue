@@ -12,7 +12,7 @@
         </nuxt-link>
 
         <div class="status">
-            <div class="meta">
+            <div class="meta" v-if="!mobileLayout">
                 <div class="meta-item category">
                     <i class="icon" v-if="article.category.name" :class="[`icon-${article.category.icon}`]"></i>
                     {{ article.category.name ? article.category.name : '暂未分类' }}
@@ -29,9 +29,23 @@
                     </div>
                 </template>
             </div>
+            <div class="meta" v-else>
+                <div class="meta-item pvs">
+                    <i class="icon icon-eye"></i>
+                    {{ article.meta.pvs }}
+                </div>
+                <div class="meta-item ups">
+                    <i class="icon icon-thumb-up-fill"></i>
+                    {{ article.meta.ups }}
+                </div>
+                <div class="meta-item comments">
+                    <i class="icon icon-comment"></i>
+                    {{ article.meta.comments }}
+                </div>
+            </div>
 
             <time class="time" :datatitme="article.createdAt">
-                <i class="icon icon-time"></i>
+                <i class="icon icon-time" v-if="!mobileLayout"></i>
                 {{ article.createdAt | dateFormat }}
             </time>
             <div class="source" :class="[getConstantItem(article.source)]">{{ article.source | constantFilter }}</div>
@@ -48,6 +62,11 @@
         data(){
             return{
                 title: ''
+            }
+        },
+        computed: {
+            mobileLayout(){
+                return this.$store.getters['app/mobileLayout']
             }
         },
         filters: {

@@ -65,7 +65,7 @@
 					</div>
 					<a class="follow-btn" href="https://github.com/jo0ger" target="_blank"><i class="icon icon-github"></i>Follow Me</a>
 				</Card>
-				<Card class="social">
+				<Card class="social" v-if="!mobileLayout">
 					<h2 class="title">Contacts</h2>
 					<ul class="social-list">
 						<li class="social-item" v-for="social in websiteInfo.socals" :key="social.icon">
@@ -77,7 +77,7 @@
 						</li>
 					</ul>
 				</Card>
-				<Card no-padding class="position">
+				<Card no-padding class="position" v-if="!mobileLayout">
 					<h2 class="title">I'm Here</h2>
 					<iframe src="http://f.amap.com/5RwGU_0106bN7" frameborder="0"></iframe>
 				</Card>
@@ -96,6 +96,11 @@
 		components: {
 			Card
 		},
+		layout({ store }) {
+			const mobileLayout = store.getters['app/mobileLayout'];
+			if (mobileLayout) return 'mobile';
+			return 'default';
+		},
 		head () {
 			return {
 				title: '关于'
@@ -111,7 +116,10 @@
             },
             friendLinks () { 
                 return this.$store.getters['website/friendlink']
-            }
+            },
+            mobileLayout(){
+				return this.$store.getters['app/mobileLayout']
+			}
         },
 		data() {
 			return {
@@ -389,6 +397,7 @@
 		}
 
 		.app.mobile-layout & {
+			width 100%
 			padding 0 $padding-md
 
 			.base-info {

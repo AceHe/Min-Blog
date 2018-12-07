@@ -2,7 +2,7 @@
     <div class="read-tool">
         <div class="tool-meta">
             <a class="tool-item like"
-                :class="{ liked, 'liking': liking }"
+                :class="{ liked, 'liking': liked }"
                 style="-webkit-background-clip: text;"
                 :title="liked ? '已点赞' : ''"
                 :data-count="article.meta.ups"
@@ -10,7 +10,7 @@
                 <div class="background"></div>
                     <i class="icon icon-thumb-up-fill" v-if="liked"></i>
                     <i class="icon icon-thumb-up" v-else></i>
-                <span class="count" v-if="article.meta.ups">{{ article.meta.ups | countFilter }}</span>
+                <span class="count" v-if="article.meta.ups">{{ article.meta.ups }}</span>
             </a>
             <a class="tool-item comment"
                 v-if="!mobileLayout"
@@ -18,7 +18,7 @@
                 title="文章评论"
                 @click="gotoComment">
                 <i class="icon icon-comment"></i>
-                <span class="count" v-if="article.meta.comments">{{ article.meta.comments | countFilter }}</span>
+                <span class="count" v-if="article.meta.comments">{{ article.meta.comments }}</span>
             </a>
         </div>
 
@@ -28,6 +28,45 @@
 <script>
     export default {
         name: 'ReadTool',
+        props:['article', 'liked'],
+        data(){
+            return{
+
+            }
+        },
+        computed: {
+            mobileLayout(){
+                return this.$store.getters['app/mobileLayout']
+            }
+        },
+        created(){
+
+        },
+        methods: {
+            async like () {
+                if( this.liked ) {
+                    return this.$notify({
+                        group: 'auth',
+                        type: 'warn',
+                        text: '您已点过赞了！'
+                    });
+                };
+
+                let data = {
+                    uuid: this.article.uuid,
+                    ups: this.article.meta.ups
+                }
+                const res = await this.$store.dispatch('history/setArticleLike', data);
+                if( res.code == 0 ){
+                    this.isLiked = true;
+                    this.$emit( 'on-like', this.article.uuid);
+                }
+            },
+
+            gotoComment() {
+                
+            }
+        }
     }
 </script>
 

@@ -29,6 +29,19 @@
             Card,
             ArticleList
         },
+        layout({ store }) {
+            const mobileLayout = store.getters['app/mobileLayout'];
+            if (mobileLayout) return 'mobile';
+            return 'default';
+        },
+        validate ({ params }) {
+            return !!params.name
+        },
+        head () {
+            return {
+                title: `${this.$route.params.name} | Category`
+            }
+        },
         computed: {
             category () { 
                 let categoryList = this.$store.getters['article/category'];
@@ -39,14 +52,6 @@
                     }
                 }
                 return obj
-            }
-        },
-        validate ({ params }) {
-            return !!params.name
-        },
-        head () {
-            return {
-                title: `${this.$route.params.name} | Category`
             }
         }
     }
@@ -107,6 +112,8 @@
         }
 
         .mobile-layout & {
+            width 100%
+            
             .info {
                 margin-bottom 0
             }

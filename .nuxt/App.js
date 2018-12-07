@@ -8,8 +8,9 @@ import '..\\assets\\style\\index.styl'
 
 import _6f6c098b from '..\\layouts\\default.vue'
 import _77430317 from '..\\layouts\\empty.vue'
+import _7ed9cc18 from '..\\layouts\\mobile.vue'
 
-const layouts = { "_default": _6f6c098b,"_empty": _77430317 }
+const layouts = { "_default": _6f6c098b,"_empty": _77430317,"_mobile": _7ed9cc18 }
 
 
 

@@ -37,6 +37,11 @@
 			Card,
 			ArticleList
 		},
+		layout({ store }) {
+			const mobileLayout = store.getters['app/mobileLayout'];
+			if (mobileLayout) return 'mobile';
+			return 'default';
+		},
 		head () {
 			return {
 				title: '小何才露尖尖角 - 代码'
@@ -122,6 +127,7 @@
 		}
 
 		.mobile-layout & {
+			width 100%
 			padding-top $padding-xs
 		}
 	}

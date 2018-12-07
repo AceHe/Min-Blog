@@ -7,7 +7,7 @@
 				style="box-shadow: none;" 
 				ref="inputBox"
 				:is-message="true"
-				@addGuesbook="handleAddGuesbook"></CommentInputBox>
+				@on-publish="handlePublish"></CommentInputBox>
 		</Modal>
 
 		<div class="submit-field">
@@ -49,7 +49,7 @@
 	import Modal from '@/components/common/Modal'
 	import MessageItem from '@/components/common/MessageItem'
 
-	import { getGuestbooks } from '@/api/index'
+	import { getGuestbooks, addGuestbook } from '@/api/index'
 
 	import { mapMutations } from 'vuex'
 
@@ -59,6 +59,11 @@
 			CommentInputBox,
 			Modal,
 			MessageItem
+		},
+		layout({ store }) {
+			const mobileLayout = store.getters['app/mobileLayout'];
+			if (mobileLayout) return 'mobile';
+			return 'default';
 		},
 		head () {
 			return {
@@ -91,23 +96,25 @@
 					result = true
 				}
 				return result;
+			},
+			mobileLayout(){
+				return this.$store.getters['app/mobileLayout']
 			}
 		},
 		created(){
+			// 留言墙列表 初始化
+			this.columnData = this.mobileLayout ? [] : [[],[],[]];
+			this.columnNum = this.mobileLayout ? 1 : 3;
 
 			// 留言墙 每列宽度
 			this.columnStyle = {
 				flexBasis: (100 / this.columnNum) + '%'
 			};
-			// 留言墙列表 初始化
-			this.columnData = [[],[],[]];
 
 			this.getGuestbook();
-
 		},
 		mounted(){
 			if (this.from() === 'about') {
-				console.log( 'this.from()',this.from() )
 				this.openBox()
 				this.$nextTick(() => {
 					let inputBox = this.$refs.inputBox;
@@ -128,19 +135,23 @@
                 let guesbook = res.data.data;
                 this.guesbookTotal = res.data.total;
 
-				for( let item of guesbook ){
-					this.columnCount++
-					if( this.columnCount % 3 == 1 ){
-						item.index = 0;
-						this.columnData[0].push( item )
-					}else if( this.columnCount % 3 == 2 ){
-						item.index = 1;
-						this.columnData[1].push( item )
-					}else{
-						item.index = 2;
-						this.columnData[2].push( item )
-					}
-				};
+                if( this.mobileLayout ){
+                	this.columnData.push( guesbook )
+                }else{
+					for( let item of guesbook ){
+						this.columnCount++
+						if( this.columnCount % 3 == 1 ){
+							item.index = 0;
+							this.columnData[0].push( item )
+						}else if( this.columnCount % 3 == 2 ){
+							item.index = 1;
+							this.columnData[1].push( item )
+						}else{
+							item.index = 2;
+							this.columnData[2].push( item )
+						}
+					};                	
+                }
 
 				this.changeBoxState()
             },
@@ -163,19 +174,24 @@
 
 			// 点赞留言
 			handleLike(uuid, index){
-				for( let item of this.columnData[index] ){
+				var columnArr = this.mobileLayout ? this.columnData[0] : this.columnData[index];
+				for( let item of columnArr ){
 					if( item.uuid == uuid ){
-						item.ups++
+						item.person.ups++
 					}
 				}
 			},
 
 			// 发表留言
-			handleAddGuesbook(){
-				this.page = 1;
-				this.columnCount= 0;
-				this.columnData = [[],[],[]];
-				this.getGuestbook();
+			async handlePublish( data, type ){
+				if( type != 0 ) return;
+				const res = await addGuestbook(data);
+                if( res.data.code == 0 ){
+                    this.page = 1;
+					this.columnCount= 0;
+					this.columnData = [[],[],[]];
+					this.getGuestbook();
+                }
 			},
 
 			from () {
@@ -190,8 +206,6 @@
 	@import '~@/assets/style/init'
 
 	.guestbook-page {
-		width 100%
-
 		.submit-field {
 			margin 48px 0
 			text-align center
@@ -251,6 +265,8 @@
 		}
 
 		.app.mobile-layout & {
+			width 100%
+			
 			.slogan {
 				font-size $font-size-base
 			}

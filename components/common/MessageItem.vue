@@ -1,26 +1,26 @@
 <template>
-    <Card class="message-item" :class="{ 'identified': user && message.author.uuid === user.uuid }">
+    <Card class="message-item" :class="{ 'identified': user && message.uuid === user.uuid }">
         <no-ssr>
             <transition name="fade">
-                <span class="tag" v-if="user && message.author.uuid === user.uuid">Ace</span>
+                <span class="tag" v-if="user && message.uuid === user.uuid">我</span>
             </transition>
         </no-ssr>
-        <a class="user" :href="message.author.site || 'javascript:;'" target="_blank">
-            <img v-lazy="message.author.avatar" :alt="message.author.name" class="avatar">
-            <span class="name">{{ message.author.name }}</span>
+        <a class="user" :href="message.person.site || 'javascript:;'" target="_blank">
+            <img v-lazy="message.person.avatar" :alt="message.person.name" class="avatar">
+            <span class="name">{{ message.person.name }}</span>
         </a>
-        <div class="content markdown-body" style="font-size: 14px;" v-html="message.renderedContent"></div>
+        <div class="content markdown-body" style="font-size: 14px;" v-html="message.person.comment"></div>
         <div class="meta">
             <a class="like"
-                :class="{ 'liked': isLiked, liking }"
+                :class="{ 'liked': isLiked }"
                 style="-webkit-background-clip: text;"
                 :title="isLiked ? '已点赞' : ''"
                 @click="setLike(message)">
                 <i class="icon icon-like-fill"></i>
-                <span class="count" v-if="message.ups">{{ message.ups }}</span>
+                <span class="count" v-if="message.person.ups">{{ message.person.ups }}</span>
             </a>
-            <time class="time" :datatitme="message.createdAt">
-                {{ message.createdAt | dateFormat }}
+            <time class="time" :datatitme="message.person.createdAt">
+                {{ message.person.createdAt | dateFormat }}
             </time>
         </div>
     </Card>
@@ -29,9 +29,6 @@
 <script>
     import Card from '@/components/common/Card'
     import { parseTime } from '@/utils/filters'
-    import { mapActions, mapGetters } from 'vuex'
-
-    import { setGuestbookLike } from '@/api/index'
 
     export default {
         name: 'MessageItem',
@@ -45,9 +42,6 @@
                     uuid: 1
                 },
                 isLiked: false,
-                liking: false,
-
-                isHasLike: false,
             }
         },
         filters: {
@@ -62,7 +56,7 @@
         methods: {
             // 判断是否已点赞留言
             async getLike () {
-                const res = await this.$store.dispatch('comments/getLike');
+                const res = await this.$store.dispatch('history/getGuesbookLike');
                 if( res && res.indexOf(this.message.uuid) != -1 ){
                     this.isLiked = true;
                     this.liking = true;
@@ -71,7 +65,7 @@
 
             // 点赞留言
             async setLike (message) {                
-                if( this.isLiked || this.liking){
+                if( this.isLiked ){
                     return this.$notify({
                         group: 'auth',
                         type: 'warn',
@@ -81,12 +75,11 @@
 
                 let data = {
                     uuid: message.uuid,
-                    ups: message.ups
+                    ups: message.person.ups
                 }
-                const res = await this.$store.dispatch('comments/setLike', data);
+                const res = await this.$store.dispatch('history/setGuesbookLike', data);
                 if( res.code == 0 ){
                     this.isLiked = true;
-                    this.liking = true;
                     this.$emit( 'updataLike', message.uuid, message.index);
                 }
             }

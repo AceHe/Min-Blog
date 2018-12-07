@@ -18,18 +18,17 @@
 <script>
     export default {
         name: 'MDEditor',
+        props: ['placeholder', 'rows'],
         data(){
             return{
                 value: '',
                 cols: 45,
-                rows: 4,
-                placeholder: '写点什么'
             }
         },
         mounted(){
             if (this.from() === 'about') {
                 this.value = `友链申请\n称呼：\n网站：\nGithub(如果有)：\n`
-            }
+            };
         },
         methods: {
             handleValueChange (e) {

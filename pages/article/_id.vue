@@ -1,16 +1,17 @@
 <template>
     <section class="article-page">
-        <!-- <div class="action-widget" v-if="!mobileLayout">
-            <ReadTool
-                :article="article"
-                :liked="liked"
-                :liking="articleLiking"
-                @on-like="like"></ReadTool>
-        </div> -->
+        <div class="action-widget" v-if="!mobileLayout">
+            <Affix offset-top="76">
+                <ReadTool
+                    :article="article"
+                    :liked="liked"
+                    @on-like="like"></ReadTool>
+            </Affix>
+        </div>
         <div class="article-widget">
             <Card class="article-detail">
                 <article class="article" v-if="article">
-                    <span class="source" :class="[getConstantItem(article.source)]">{{ article.source | constantFilter }}</span>
+                    <span v-if="!mobileLayout" class="source" :class="[getConstantItem(article.source)]">{{ article.source | constantFilter }}</span>
                     <h2 class="title">{{ article.title }}</h2>
                     <div class="meta">
                         <nuxt-link :to="`/category/${article.category.name}`" class="meta-item category">
@@ -28,7 +29,7 @@
                         </div>
                     </div>
 
-                    <div class="thumb" v-if="article.thumb">
+                    <div class="thumb" v-if="article.thumb && !mobileLayout">
                         <img v-lazy="article.thumb" alt="">
                     </div>
 
@@ -64,10 +65,21 @@
                         </Tag>
                     </div>
 
+                    <div class="action" v-if="mobileLayout">
+                        <ReadTool
+                            :article="article"
+                            :liked="liked"
+                            @on-like="like">
+                        </ReadTool>
+                    </div>
+
                 </article>
             </Card>
 
-            <!-- <Comment class="article-comments" :article="article"></Comment> -->
+            <Comment 
+                class="article-comments" 
+                :article="article"
+                @on-comment="handleComment"></Comment>
         </div>
     </section>
 </template>
@@ -75,42 +87,28 @@
 <script>
     import Card  from '@/components/common/Card'
     import Tag from '@/components/common/Tag'
+    import Affix from '@/components/common/Affix'
+    import ReadTool from '@/components/common/ReadTool'
+    import Comment from '@/components/common/Comments/Comment'
 
     import { parseTime, constantFilter } from '@/utils/filters'
     import { getScroll } from '@/utils/dom'
 
-    import { mapActions } from 'vuex'
-
-    import { getArticleContent } from '@/api/index'
+    import { getArticleContent, addArticleComment } from '@/api/index'
 
     export default {
         name: 'ArticleDetail',
         components: {
             Card,
-            Tag
+            Tag,
+            Affix,
+            ReadTool,
+            Comment
         },
-        computed: {
-            showArticleTitle () { 
-                return this.$store.getters['app/showArticleTitle']
-            }
-        },
-        filters: {
-            dateFormat(value) {
-                if (!value) return ''
-                return parseTime(value)
-            },
-            constantFilter(value) {
-                if (!value) return ''
-                return constantFilter(value)
-            },
-        },
-        data(){
-            return {
-                article: {},
-                articleFontSize: 16,
-
-                scrollTop: 0
-            }
+        layout({ store }) {
+            const mobileLayout = store.getters['app/mobileLayout'];
+            if (mobileLayout) return 'mobile';
+            return 'default';
         },
         validate ({ params }) {
             return !!params.id
@@ -130,6 +128,35 @@
                 }]
             }
         },
+        computed: {
+            showArticleTitle () { 
+                return this.$store.getters['app/showArticleTitle']
+            },
+            mobileLayout(){
+                return this.$store.getters['app/mobileLayout']
+            }
+        },
+        filters: {
+            dateFormat(value) {
+                if (!value) return ''
+                return parseTime(value)
+            },
+            constantFilter(value) {
+                if (!value) return ''
+                return constantFilter(value)
+            },
+        },
+        data(){
+            return {
+                article: {},
+                comment: [],
+
+                liked: false,
+                articleFontSize: 16,
+
+                scrollTop: 0
+            }
+        },
         async asyncData ({ params }) {
             let opt = { uuid: params.id }
             let { data } = await getArticleContent(opt);
@@ -137,6 +164,7 @@
         },
         created(){
             this.setTitle();
+            this.getLike();
         }, 
         mounted (){
             window.addEventListener('scroll', this.handleScroll);
@@ -145,9 +173,31 @@
             window.removeEventListener('scroll', this.handleScroll);
         },
         methods: {
-
+            // 获取标题
             async setTitle () {
                 await this.$store.dispatch('article/setTitle', this.article.title);
+            },
+
+            // 判断是否已点赞文章
+            async getLike () {
+                const res = await this.$store.dispatch('history/getArticleLike');
+                if( res && res.indexOf(this.article.uuid) != -1 ){
+                    this.liked = true;
+                }
+            },
+
+            // 点赞文章
+            like( uuid ) {
+                this.liked = true;
+                this.article.meta.ups++;
+            },
+
+            // 发表留言
+            async handleComment(data, type) {
+                if( type != 2 ) return;
+                let info = data;
+                info.uuid = this.article.uuid;
+                const res = await addArticleComment(info);
             },
 
             handleScroll(){

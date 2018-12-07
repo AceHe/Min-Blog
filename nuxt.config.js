@@ -61,6 +61,7 @@ module.exports = {
     },
 
     plugins: [
+        { src: '@/plugins/console-say-hi', ssr: false },
         { src: '@/plugins/copyright', ssr: false },
         { src: '@/plugins/count-to', ssr: false },
         { src: '@/plugins/lazyload', ssr: false },
