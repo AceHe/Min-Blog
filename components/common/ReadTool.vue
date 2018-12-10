@@ -64,7 +64,7 @@
             },
 
             gotoComment() {
-                
+                this.$scrollToComments()
             }
         }
     }

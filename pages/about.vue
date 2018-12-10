@@ -51,6 +51,7 @@
 				</Card>
 			</div>
 			<div class="column column-right">
+				
 				<Card class="github-follow">
 					<div class="status">
 						<div class="follower">
@@ -65,6 +66,7 @@
 					</div>
 					<a class="follow-btn" href="https://github.com/jo0ger" target="_blank"><i class="icon icon-github"></i>Follow Me</a>
 				</Card>
+
 				<Card class="social" v-if="!mobileLayout">
 					<h2 class="title">Contacts</h2>
 					<ul class="social-list">
@@ -77,7 +79,8 @@
 						</li>
 					</ul>
 				</Card>
-				<Card no-padding class="position" v-if="!mobileLayout">
+
+				<Card class="position" :no-padding="true" v-if="!mobileLayout">
 					<h2 class="title">I'm Here</h2>
 					<iframe src="http://f.amap.com/5RwGU_0106bN7" frameborder="0"></iframe>
 				</Card>

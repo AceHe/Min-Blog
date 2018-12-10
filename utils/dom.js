@@ -34,9 +34,7 @@ export const getOffset = (element) => {
 	}
 }
 
-export const scrollTo = (element, duration) => {
-
-	let options = {};
+export const scrollTo = (element = null, duration = 500, options = {}) => {
 
 	if (typeof element === 'string') {
 		element = $(element)
@@ -45,17 +43,18 @@ export const scrollTo = (element, duration) => {
 		return
 	}
 
-	options.easing = options.easing || easing.linear
+	options.easing = options.easing || easing.linear;
 
 	const page = $('html, body');
+	let initialY = page.scrollTop;
+	let elementY = 0;
 
-		let initialY = page.scrollTop
-		let elementY = 0
 	if (Object.is(typeof element, 'number')) {
 		elementY = element
 	} else {
 		elementY = initialY + (element).getBoundingClientRect().top
 	}
+
 	let targetY = page.scrollHeight - elementY < window.innerHeight
 	  ? page.scrollHeight - window.innerHeight
 	  : elementY
@@ -64,24 +63,24 @@ export const scrollTo = (element, duration) => {
 		targetY += options.offset
 	}
 
-	let diff = targetY - initialY
-	let be = BezierEasing.apply(BezierEasing, options.easing)
-	let start
+	let diff = targetY - initialY;
+	let be = BezierEasing.apply(BezierEasing, options.easing);
+	let start;
 
 	let done = () => {
 		options.onDone && options.onDone()
 	}
 
-	if (!diff) return
+	if (!diff) return;
 
 	window.requestAnimationFrame(function step (timestamp) {
-		if (!start) start = timestamp
+		if (!start) start = timestamp;
 
-		const time = timestamp - start
-		let progress = Math.min(time / duration, 1)
-		progress = be(progress)
+		const time = timestamp - start;
+		let progress = Math.min(time / duration, 1);
+		progress = be(progress);
 
-		window.scrollTo(0, initialY + diff * progress)
+		window.scrollTo(0, initialY + diff * progress);
 
 		if (time < duration) {
 			window.requestAnimationFrame(step)

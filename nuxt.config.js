@@ -68,6 +68,7 @@ module.exports = {
         { src: '@/plugins/notification', ssr: true },
         { src: '@/plugins/particles', ssr: false },
         { src: '@/plugins/router', ssr: false },
+        { src: '@/plugins/scroll-to', ssr: false },
     ],
 
     modules: [

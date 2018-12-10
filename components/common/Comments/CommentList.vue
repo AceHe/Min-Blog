@@ -107,9 +107,9 @@
                 if (!this.mobileLayout) {
                     const inputBox = this.$refs.inputBox;
                     inputBox.focus();
-                    // this.$scrollTo(inputBox.$el, 500, {
-                    //     offset: -document.body.clientHeight / 2
-                    // })
+                    this.$scrollTo(inputBox.$el, 500, {
+                        offset: -document.body.clientHeight / 2
+                    })
                 }
             },
 

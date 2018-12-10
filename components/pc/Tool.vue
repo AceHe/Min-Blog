@@ -1,5 +1,5 @@
 <template>
-	<Card class="tool" no-padding>
+	<Card class="tool" :no-padding="true">
 		<div class="wrapper">
 			<transition-group tag="div" name="fade" class="tool-list">
 				<a class="tool-item feedback" key="feedback" :href="'mailto:'">

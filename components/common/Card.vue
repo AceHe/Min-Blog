@@ -1,5 +1,11 @@
 <template>
-    <div class="card" :class="{ 'card-bordered': bordered, 'card-no-padding': Padding }" :style="style">
+    <div 
+        class="card" 
+        :class="{ 
+            'card-bordered': bordered, 
+            'card-no-padding': noPadding 
+        }" 
+        :style="style">
         <div class="card-header" v-if="$slots.header || header">
             <slot name="header">{{ header }}</slot>
         </div>
@@ -12,15 +18,27 @@
 <script>
     export default {
         name: 'Card',
-        props: ['header', 'borderStyle', 'bordered', 'noMargin', 'noPadding'],
-        computed:{
-            Padding(){
-                if( this.noPadding !== undefined ){
-                    return true;
-                }else{
-                    return false;
-                }
-            }
+        props: {
+            header:{
+                default: ''
+            },
+            borderStyle:{
+                default: null
+            },
+            bordered:{
+                default: false
+            },
+            noMargin:{
+                type: Boolean,
+                default: false
+            },
+            noPadding:{
+                type: Boolean,
+                default: false
+            },
+        },
+        created(){
+            this.style();
         },
         methods: {
             style () {
