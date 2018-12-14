@@ -80,7 +80,7 @@
                 const res = await this.$store.dispatch('history/setGuesbookLike', data);
                 if( res.code == 0 ){
                     this.isLiked = true;
-                    this.$emit( 'updataLike', message.uuid, message.index);
+                    // this.$emit( 'updataLike', message.uuid, message.index);
                 }
             }
         }
@@ -125,6 +125,7 @@
 
         .content {
             margin $padding-sm 0
+            white-space pre
         }
 
         .meta {

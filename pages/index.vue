@@ -27,9 +27,8 @@
 
 <script>
 	import Card  from '@/components/common/Card'
+	import Base from '@/Base'
 	import ArticleList from '@/components/common/ArticleList'
-
-	import { mapGetter } from 'vuex'
 
 	export default {
 		name: 'Index',
@@ -37,14 +36,10 @@
 			Card,
 			ArticleList
 		},
-		layout({ store }) {
-			const mobileLayout = store.getters['app/mobileLayout'];
-			if (mobileLayout) return 'mobile';
-			return 'default';
-		},
+		extends: Base,
 		head () {
 			return {
-				title: '小何才露尖尖角 - 代码'
+				title: '小何才露尖尖角 - 首页'
 			}
 		},
 		computed: {

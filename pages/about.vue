@@ -64,7 +64,7 @@
 							<div class="label">Following</div>
 						</div>
 					</div>
-					<a class="follow-btn" href="https://github.com/jo0ger" target="_blank"><i class="icon icon-github"></i>Follow Me</a>
+					<a class="follow-btn" href="https://github.com/AceHe" target="_blank"><i class="icon icon-github"></i>Follow Me</a>
 				</Card>
 
 				<Card class="social" v-if="!mobileLayout">
@@ -91,22 +91,17 @@
 
 <script>
 	import Card  from '@/components/common/Card'
-
-	import { mapMutations } from 'vuex'
+	import Base from '@/Base'
 
 	export default {
 		name: 'About',
 		components: {
 			Card
 		},
-		layout({ store }) {
-			const mobileLayout = store.getters['app/mobileLayout'];
-			if (mobileLayout) return 'mobile';
-			return 'default';
-		},
+		extends: Base,
 		head () {
 			return {
-				title: '关于'
+				title: '小何才露尖尖角 - 关于'
 			}
 		},
 		fetch ({ store }) {
@@ -119,15 +114,8 @@
             },
             friendLinks () { 
                 return this.$store.getters['website/friendlink']
-            },
-            mobileLayout(){
-				return this.$store.getters['app/mobileLayout']
-			}
-        },
-		data() {
-			return {
-			}
-		}
+            }
+        }
 	}
 </script>
 

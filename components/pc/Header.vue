@@ -32,7 +32,7 @@
 				return this.$store.getters['app/showArticleTitle']
 			},
 			articleTitle () {
-				return this.$store.getters['article/title']
+				return this.$store.getters['app/title']
 			}
 		},
 	    data() {

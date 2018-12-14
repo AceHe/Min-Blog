@@ -32,41 +32,17 @@
             }
         },
         created() {
-            this.getTheme();
-            this.getCategory();
-            this.getTag();
-            this.getHot();
-            this.getWebsite();
-            this.getFriendLink();
-            this.getArchive();
+            this.init()
         },
         methods:{
-            async getTheme () {
+            async init () {
                 await this.$store.dispatch('app/getTheme');
-            },
-
-            async getCategory () {
+                
                 await this.$store.dispatch('article/getCategory');
-            },
-
-            async getTag () {
                 await this.$store.dispatch('article/getTag');
-            },
-
-            async getHot () {
                 await this.$store.dispatch('article/getHot');
-            },
-
-            async getWebsite () {
                 await this.$store.dispatch('website/getWebsite');
-            },
-
-            async getFriendLink () {
                 await this.$store.dispatch('website/getFriendLink');
-            },
-
-            async getArchive () {
-                await this.$store.dispatch('archive/getArchive');
             }
         }
     }

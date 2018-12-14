@@ -55,6 +55,7 @@
     import CommentInputBox from './CommentInputBox'
     import CommentItem from './CommentItem'
 
+    import Bus from '@/utils/bus'
     import { scrollTo } from '@/utils/dom'
 
     import { addArticleCommentReply } from '@/api/index'
@@ -121,6 +122,8 @@
             async handleReplyPublish( data, type ){
                 if( type != 1 ) return;
 
+                console.log('回复评论')
+
                 let info = data;
                 info.type = type;
                 info.uuid = this.commentUuid;
@@ -128,6 +131,11 @@
                 info.replySite = this.replyTarget ? this.replyTarget.person.site : '';
 
                 const res = await addArticleCommentReply(info);
+                if( res.data.code == 0 ){
+                    this.$refs.inputBox.handleEmpty();
+                    this.replyTarget = '';
+                    Bus.$emit('getComment')
+                }
             },
 
             // 取消回复

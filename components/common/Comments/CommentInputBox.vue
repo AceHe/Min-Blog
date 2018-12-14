@@ -30,7 +30,7 @@
                             <input 
                                 v-model.trim="site"
                                 type="url" 
-                                placeholder="站点" 
+                                placeholder="站点http(s)://..." 
                                 required="required" 
                                 name="site" 
                                 autocomplete="false">
@@ -63,7 +63,8 @@
 
                 <div class="action">
                     <div class="action-item submit">
-                        <button class="submit-btn" @click="submit">
+                        <pacman-loader v-if="typeTextFetching" color="#f8e71c" size="20px"></pacman-loader>
+                        <button class="submit-btn" v-else @click="submit">
                             <span>{{ typeText }}</span>
                         </button>
                     </div>
@@ -77,6 +78,8 @@
 <script>
     import Card  from '@/components/common/Card'
     import MDEditor  from '@/components/common/MDEditor'
+
+    import { isEmail, isSiteUrl } from '@/utils/validator'
 
     export default {
         name: 'CommentInputBox',
@@ -96,6 +99,7 @@
         data(){
             return {
                 loading: false,
+                typeTextFetching: false,
 
                 name: '',
                 email: '',
@@ -104,7 +108,22 @@
             }
         },
         methods: {
+            notify(text){
+                return this.$notify({
+                    group: 'auth',
+                    type: 'warn',
+                    text: text
+                });
+            },
+
             async submit() {
+                if (!this.content) return this.notify('你要说啥？');
+                if (!this.name) return this.notify('你的昵称呢？');
+                if (!this.email) return this.notify('你的邮箱呢？');
+                if (!isEmail(this.email)) return this.notify('邮箱格式错误');
+                if (this.site && !isSiteUrl(this.site)) return this.notify('站点格式错误');
+
+                this.typeTextFetching = true;
                 let data = {
                     name: this.name,
                     email: this.email,
@@ -129,9 +148,23 @@
                 this.$emit('on-clear-reply')
             },
 
+            // 发布成功以后,清空状态
+            handleEmpty(){
+                // 隐藏loading
+                this.typeTextFetching = false;
+
+                // 清空输入框
+                this.name = '';
+                this.email = '';
+                this.site = '';
+
+                // 清空 editor
+                this.$refs.editor.handleEmpty();
+            },
+
             focus () {
                 this.$refs.editor.focus()
-            },
+            }
         }
     }
     

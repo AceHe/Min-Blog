@@ -17,6 +17,7 @@ import nuxt_plugin_consolesayhi_25f36366 from 'nuxt_plugin_consolesayhi_25f36366
 import nuxt_plugin_copyright_09599f5a from 'nuxt_plugin_copyright_09599f5a' // Source: ..\\plugins\\copyright (ssr: false)
 import nuxt_plugin_countto_419519ed from 'nuxt_plugin_countto_419519ed' // Source: ..\\plugins\\count-to (ssr: false)
 import nuxt_plugin_lazyload_0d09004e from 'nuxt_plugin_lazyload_0d09004e' // Source: ..\\plugins\\lazyload (ssr: false)
+import nuxt_plugin_loading_71bc50c8 from 'nuxt_plugin_loading_71bc50c8' // Source: ..\\plugins\\loading (ssr: false)
 import nuxt_plugin_notification_1cfa1e42 from 'nuxt_plugin_notification_1cfa1e42' // Source: ..\\plugins\\notification
 import nuxt_plugin_particles_353f1f39 from 'nuxt_plugin_particles_353f1f39' // Source: ..\\plugins\\particles (ssr: false)
 import nuxt_plugin_router_3f7e063d from 'nuxt_plugin_router_3f7e063d' // Source: ..\\plugins\\router (ssr: false)
@@ -173,6 +174,7 @@ async function createApp (ssrContext) {
     if (typeof nuxt_plugin_copyright_09599f5a === 'function') await nuxt_plugin_copyright_09599f5a(app.context, inject)
     if (typeof nuxt_plugin_countto_419519ed === 'function') await nuxt_plugin_countto_419519ed(app.context, inject)
     if (typeof nuxt_plugin_lazyload_0d09004e === 'function') await nuxt_plugin_lazyload_0d09004e(app.context, inject)
+    if (typeof nuxt_plugin_loading_71bc50c8 === 'function') await nuxt_plugin_loading_71bc50c8(app.context, inject)
     if (typeof nuxt_plugin_particles_353f1f39 === 'function') await nuxt_plugin_particles_353f1f39(app.context, inject)
     if (typeof nuxt_plugin_router_3f7e063d === 'function') await nuxt_plugin_router_3f7e063d(app.context, inject)
     if (typeof nuxt_plugin_scrollto_8d1803f2 === 'function') await nuxt_plugin_scrollto_8d1803f2(app.context, inject)

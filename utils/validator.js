@@ -1,3 +1,5 @@
+import validator from 'validator'
+
 // 验证是否是移动端
 export const isMobile = (ua = '') => {
 	if (!ua && window) {
@@ -8,3 +10,10 @@ export const isMobile = (ua = '') => {
 	}
 	return false
 }
+
+export const isSiteUrl = (site = '') => validator.isURL(site, {
+  protocols: ['http', 'https'],
+  require_protocol: true
+})
+
+export const isEmail = validator.isEmail

@@ -6,7 +6,10 @@
             @on-loadmore="handleLoadmore"
             @on-reply="handleReply">
         </CommentList>
-        <CommentInputBox @on-publish="handlePublish"></CommentInputBox>
+        <CommentInputBox 
+            ref="inputbox"
+            @on-publish="handlePublish">
+        </CommentInputBox>
     </div>
 </template>
 
@@ -21,14 +24,10 @@
             CommentList,
             CommentInputBox
         },
-        data(){
-            return {
-                commentList: {}
+        computed: {
+            commentList () { 
+                return this.article.comments;
             }
-        },
-        created(){
-            // 获取评论
-            this.commentList = this.article.comments;
         },
         methods: {
             handleSort(){
@@ -41,6 +40,12 @@
 
             },
 
+            // 清空子组件状态
+            handleEmpty(){
+                this.$refs.inputbox.handleEmpty();
+            },
+
+            // 发表评论,调用父级方法
             handlePublish(data, type){
                 this.$emit('on-comment', data, type)
             },

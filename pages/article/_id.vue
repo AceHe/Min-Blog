@@ -3,8 +3,10 @@
         <div class="action-widget" v-if="!mobileLayout">
             <Affix offset-top="76">
                 <ReadTool
+                    v-if="article"
                     :article="article"
                     :liked="liked"
+                    :liking="articleLiking"
                     @on-like="like"></ReadTool>
             </Affix>
         </div>
@@ -56,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div class="tags">
+                    <div class="tags" v-if="article">
                         <Tag v-for="tag in article.tag"
                             :key="tag.uuid"
                             :name="tag.name"
@@ -67,8 +69,10 @@
 
                     <div class="action" v-if="mobileLayout">
                         <ReadTool
+                            v-if="article"
                             :article="article"
                             :liked="liked"
+                            :liking="articleLiking"
                             @on-like="like">
                         </ReadTool>
                     </div>
@@ -77,7 +81,9 @@
             </Card>
 
             <Comment 
+                v-if="article"
                 class="article-comments" 
+                ref="comment"
                 :article="article"
                 @on-comment="handleComment"></Comment>
         </div>
@@ -90,8 +96,10 @@
     import Affix from '@/components/common/Affix'
     import ReadTool from '@/components/common/ReadTool'
     import Comment from '@/components/common/Comments/Comment'
+    import Base from '@/Base'
 
-    import { parseTime, constantFilter } from '@/utils/filters'
+    import Bus from '@/utils/bus'
+    import { sourceTranslate } from '@/utils/publicMethods'
     import { getScroll } from '@/utils/dom'
 
     import { getArticleContent, addArticleComment } from '@/api/index'
@@ -105,11 +113,20 @@
             ReadTool,
             Comment
         },
-        layout({ store }) {
-            const mobileLayout = store.getters['app/mobileLayout'];
-            if (mobileLayout) return 'mobile';
-            return 'default';
+        extends: Base,
+        asyncData ({ params }) {
+            console.log(1112)
+            return getArticleContent( { uuid: params.id } )
+                .then((res) => {
+                    console.log(res)
+                    return { article: res.data.data }
+                })
         },
+        // async asyncData({ params }) {
+            
+        //     const { data } = await getArticleContent( { uuid: params.id } )
+        //     return { article: data.data }
+        // },
         validate ({ params }) {
             return !!params.id
         },
@@ -129,67 +146,54 @@
             }
         },
         computed: {
+            // 获取文章内容
+            // article () { 
+            //     return this.$store.getters['article/article']
+            // },
+            // 是否展示标题
             showArticleTitle () { 
                 return this.$store.getters['app/showArticleTitle']
             },
-            mobileLayout(){
-                return this.$store.getters['app/mobileLayout']
+            // 判断是否已点赞文章
+            liked () {
+                if (!this.article) return false;
+                const res = this.$store.getters['history/articleLike'];
+                return !!res.find(item => item === this.article.uuid)
             }
-        },
-        filters: {
-            dateFormat(value) {
-                if (!value) return ''
-                return parseTime(value)
-            },
-            constantFilter(value) {
-                if (!value) return ''
-                return constantFilter(value)
-            },
         },
         data(){
             return {
-                article: {},
-                comment: [],
-
-                liked: false,
+                // article: {},
+                articleLiking: false,
                 articleFontSize: 16,
 
                 scrollTop: 0
             }
         },
-        async asyncData ({ params }) {
-            let opt = { uuid: params.id }
-            let { data } = await getArticleContent(opt);
-            return { article: data.data }
-        },
         created(){
-            this.setTitle();
-            this.getLike();
+            this.init();
         }, 
         mounted (){
             window.addEventListener('scroll', this.handleScroll);
+
+            Bus.$on('getComment',()=>{
+                this.handleGetArticle(false);
+            })
         },
         beforeDestroy (){
             window.removeEventListener('scroll', this.handleScroll);
         },
         methods: {
-            // 获取标题
-            async setTitle () {
-                await this.$store.dispatch('article/setTitle', this.article.title);
-            },
-
-            // 判断是否已点赞文章
-            async getLike () {
-                const res = await this.$store.dispatch('history/getArticleLike');
-                if( res && res.indexOf(this.article.uuid) != -1 ){
-                    this.liked = true;
-                }
+            // 设置头部标题\获取已点赞文章
+            async init () {
+                let title = this.article ? this.article.title : '';
+                await this.$store.dispatch('app/setTitle', title);
+                await this.$store.dispatch('history/getArticleLike');
             },
 
             // 点赞文章
-            like( uuid ) {
-                this.liked = true;
-                this.article.meta.ups++;
+            async like( uuid ) {
+                console.log( '11' )
             },
 
             // 发表留言
@@ -198,8 +202,24 @@
                 let info = data;
                 info.uuid = this.article.uuid;
                 const res = await addArticleComment(info);
+
+                if( res.data.code == 0 ){
+                    this.handleGetArticle(true)
+                }
             },
 
+            // 重新获取文章内容评论
+            async handleGetArticle(reply){
+                let data = { uuid: this.article.uuid };
+                let res = await this.$store.dispatch('article/getArticle', data);
+
+                if( res.data.code == 0 && reply ){
+                    this.$scrollToComments();
+                    this.$refs.comment.handleEmpty();
+                }
+            },
+
+            // 是否显示标题
             handleScroll(){
                 const scrollTop = getScroll(document.body, true);
 
@@ -221,9 +241,7 @@
             },
 
             getConstantItem(source){
-                if( source == 1 ) return 'translate';
-                if( source == 2 ) return 'reprint';
-                if( source == 3 ) return 'original';
+                return sourceTranslate(source)
             }
         }
     }

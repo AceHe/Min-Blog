@@ -39,7 +39,7 @@ module.exports = {
     },
 
     loading: {
-        color: '302e31'
+        color: '#302e31'
     },
 
     css: [
@@ -65,6 +65,7 @@ module.exports = {
         { src: '@/plugins/copyright', ssr: false },
         { src: '@/plugins/count-to', ssr: false },
         { src: '@/plugins/lazyload', ssr: false },
+        { src: '@/plugins/loading', ssr: false },
         { src: '@/plugins/notification', ssr: true },
         { src: '@/plugins/particles', ssr: false },
         { src: '@/plugins/router', ssr: false },

@@ -22,6 +22,7 @@
 
 <script>
     import Card  from '@/components/common/Card'
+    import Base from '@/Base'
     import ArticleList from '@/components/common/ArticleList'
 
     export default {
@@ -30,11 +31,7 @@
             Card,
             ArticleList
         },
-        layout({ store }) {
-            const mobileLayout = store.getters['app/mobileLayout'];
-            if (mobileLayout) return 'mobile';
-            return 'default';
-        },
+        extends: Base,
         validate ({ params }) {
             return !!params.name
         },

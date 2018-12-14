@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 var server = axios.create({
-	baseURL: 'http://localhost:8080',
+	baseURL: 'http://localhost:30017',
+	// baseURL: 'http://198.181.41.13:30017',
 	timeout: 6000,
 });
 

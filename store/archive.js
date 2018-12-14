@@ -2,9 +2,8 @@
 import { getArchive } from '@/api/index'
 import { sortByKey } from '@/utils/publicMethods'
 
-
-const SET_ARCHIVE = 'SET_ARCHIVE';
-const SET_COUNT = 'SET_COUNT';
+const SET_ARCHIVE = 'SET_ARCHIVE';  // 归档数据
+const SET_COUNT = 'SET_COUNT';      // 文章数量
 
 export const state = () => ({
 	archive: [],

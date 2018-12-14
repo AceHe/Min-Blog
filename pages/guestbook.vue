@@ -34,11 +34,11 @@
 			</transition-group>
 		</transition-group>
 
-		<p class="no-data" v-if="guesbookTotal == 0">空空如也</p>
-
-		<transition name="fade" mode="out-in" v-if="!hasNoMore">
-			<div class="indicator">
-				<button class="loadmore" @click="loadmore">来，继续翻</button>
+		<p class="no-data" v-if="guesbookTotal < 1 && !messageListFetching">空空如也</p>
+		<transition name="fade" mode="out-in">
+			<div class="indicator" v-if="messageListFetching || !hasNoMore">
+				<pacman-loader v-if="messageListFetching" color="#f8e71c" size="20px"></pacman-loader>
+				<button class="loadmore" v-else-if="!hasNoMore && messageList.length" @click="loadmore">继续翻</button>
 			</div>
 		</transition>
 	</section>
@@ -48,10 +48,9 @@
 	import CommentInputBox from '@/components/common/Comments/CommentInputBox'
 	import Modal from '@/components/common/Modal'
 	import MessageItem from '@/components/common/MessageItem'
+	import Base from '@/Base'
 
 	import { getGuestbooks, addGuestbook } from '@/api/index'
-
-	import { mapMutations } from 'vuex'
 
 	export default {
 		name: 'Guestbook',
@@ -60,19 +59,20 @@
 			Modal,
 			MessageItem
 		},
-		layout({ store }) {
-			const mobileLayout = store.getters['app/mobileLayout'];
-			if (mobileLayout) return 'mobile';
-			return 'default';
-		},
+		extends: Base,
 		head () {
 			return {
-				title: '留言墙'
+				title: '小何才露尖尖角 - 留言墙'
 			}
 		},
 		fetch ({ store }) {
 			store.commit('app/SET_FULL_COLUMN', true)
 			return Promise.resolve()
+		},
+		computed: {
+			hasNoMore(){
+				return this.page * this.limt >= this.guesbookTotal
+			}
 		},
 		data(){
 			return{
@@ -81,24 +81,15 @@
 				columnStyle: {}, // 留言墙宽度
 				columnCount: 0, // 计算留言排列顺序
 
+				messageList: [],
 				guesbookTotal: 0, // 总留言条数
+				messageListFetching: false,
 
 				page: 1,
 				limt: 9,
 
+				friendInputBox: true, // 判断是否是第一次进入申请友链
 				showInputBox: false,	
-			}
-		},
-		computed: {
-			hasNoMore(){
-				let result = false;
-				if( this.page * this.limt >= this.guesbookTotal ){
-					result = true
-				}
-				return result;
-			},
-			mobileLayout(){
-				return this.$store.getters['app/mobileLayout']
 			}
 		},
 		created(){
@@ -114,14 +105,7 @@
 			this.getGuestbook();
 		},
 		mounted(){
-			if (this.from() === 'about') {
-				this.openBox()
-				this.$nextTick(() => {
-					let inputBox = this.$refs.inputBox;
-					inputBox.content = `友链申请\n称呼：\n网站：\nGithub(如果有)：\n`
-					inputBox.focus();
-				})
-			}
+			
 		},
 		methods: {
 			// 获取留言墙列表
@@ -132,13 +116,13 @@
 				}
                 const res = await getGuestbooks(data);
                 
-                let guesbook = res.data.data;
+                this.messageList = res.data.data;
                 this.guesbookTotal = res.data.total;
 
                 if( this.mobileLayout ){
-                	this.columnData.push( guesbook )
+                	this.columnData.push( this.messageList )
                 }else{
-					for( let item of guesbook ){
+					for( let item of this.messageList ){
 						this.columnCount++
 						if( this.columnCount % 3 == 1 ){
 							item.index = 0;
@@ -153,7 +137,19 @@
 					};                	
                 }
 
-				this.changeBoxState()
+                //	判断是不是申请友链
+                if ( this.from() === 'about' && this.friendInputBox ) {
+					this.openBox()
+					this.$nextTick(() => {
+						let inputBox = this.$refs.inputBox;
+						inputBox.content = `友链申请\n称呼：\n网站：\nGithub(如果有)：\n`
+						inputBox.focus();
+					})
+				}else{
+					this.showInputBox = false;
+				}
+
+				this.messageListFetching = false;
             },
 
 			// opne Modal
@@ -164,10 +160,12 @@
 			// close Modal
 			changeBoxState(){
 				this.showInputBox = false;
+				this.friendInputBox = false;
 			},
 
 			// 加载更多
 			loadmore(){
+				this.messageListFetching = true;
 				this.page++;
 				this.getGuestbook();
 			},
@@ -187,13 +185,17 @@
 				if( type != 0 ) return;
 				const res = await addGuestbook(data);
                 if( res.data.code == 0 ){
-                    this.page = 1;
+                	this.friendInputBox = false;
+                	this.changeBoxState();
+
+     				this.page = 1;
 					this.columnCount= 0;
-					this.columnData = [[],[],[]];
+					this.columnData = this.mobileLayout ? [] : [[],[],[]];
 					this.getGuestbook();
                 }
 			},
 
+			// 获取地址栏参数
 			from () {
 			    return this.$route.query.from
 			}

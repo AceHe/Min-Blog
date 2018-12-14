@@ -1,7 +1,15 @@
 {
 	"name": "min-blog",
+	"config": {
+		"nuxt": {
+			"host": "127.0.0.1",
+			"port": "8205"
+		}
+	},
 	"scripts": {
-		"dev": "nuxt"
+		"dev": "nuxt",
+		"build": "nuxt build",
+		"start": "nuxt start"
 	},
 	"dependencies": {
 		"@nuxtjs/axios": "^5.3.6",
@@ -10,7 +18,9 @@
 		"normalize.css": "^8.0.0",
 		"nuxt": "^2.2.0",
 		"particles.js": "^2.0.0",
+		"validator": "^10.9.0",
 		"vue-count-to": "^1.0.13",
+		"vue-loaders": "^2.0.0",
 		"vue-notification": "^1.3.13"
 	},
 	"devDependencies": {

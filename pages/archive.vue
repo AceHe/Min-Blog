@@ -1,6 +1,6 @@
 <template>
 	<section class="archive-page">
-		<Card v-show="!archivesFetching">
+		<Card>
 
 			<div slot="header" class="info-header">
 				<i class="icon icon-archive"></i>
@@ -48,7 +48,7 @@
 
 <script>
 	import Card  from '@/components/common/Card'
-	import { monthFilter, constantFilter } from '@/utils/filters'
+	import Base from '@/Base'
 	import { sourceTranslate } from '@/utils/publicMethods'
 
 	export default {
@@ -56,26 +56,15 @@
 		components: {
 			Card
 		},
-		layout({ store }) {
-			const mobileLayout = store.getters['app/mobileLayout'];
-			if (mobileLayout) return 'mobile';
-			return 'default';
-		},
+		extends: Base,
 		head () {
 			return {
-				title: '归档'
+				title: '小何才露尖尖角 - 归档'
 			}
 		},
-		filters: {
-            monthFilter(value) {
-                if (!value) return ''
-                return monthFilter(value)
-            },
-            constantFilter(value) {
-                if (!value) return ''
-                return constantFilter(value)
-            },
-        },
+		async fetch ({ store, params }) {
+			await store.dispatch('archive/getArchive');
+		},
         computed: {
             archives () { 
                 return this.$store.getters['archive/archive']
@@ -84,11 +73,6 @@
             	return this.$store.getters['archive/count']
             }
         },
-		data(){
-			return {
-				archivesFetching: false,
-			}
-		},
 		methods: {
 			getConstantItem(source){
                 return sourceTranslate(source)

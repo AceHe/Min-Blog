@@ -6,7 +6,7 @@
                 :placeholder="placeholder"
                 :cols="cols"
                 :rows="rows"
-                :value="value"
+                v-model="value"
                 required="required"
                 aria-required="true"
                 @input="handleValueChange">
@@ -31,12 +31,20 @@
             };
         },
         methods: {
+            // 父组件执行的 清空value
+            handleEmpty(){
+                this.value = '';
+            },
+
+            // 向父组件传递内容
             handleValueChange (e) {
                 this.$emit('input', e.target.value.trim())
             },
+
             from () {
                 return this.$route.query.from
             },
+
             focus () {
                 this.$refs.input.focus()
             }

@@ -8,10 +8,9 @@
         </div>
         <div class="indicator">
             <transition name="fade" mode="out-in">
-                <button class="loadmore" 
-                    v-if=" page * limt < total "
-                    @click="loadmore">Continue</button>
-                <p class="no-more-data" v-else-if=" total != 0 ">No More</p>
+                <pacman-loader v-if="articleListFetching" color="#f8e71c" size="20px"></pacman-loader>
+                <p class="no-more-data" v-else-if="hasNoMore">别翻啦,没有啦</p>
+                <button class="loadmore" v-else-if="articleList.length" @click="loadmore">继续翻</button>
                 <p class="no-data" v-else>Nothing Here</p>
             </transition>
         </div>
@@ -29,13 +28,19 @@
         components: {
             ArticleItem
         },
+        computed:{
+            hasNoMore(){
+                return this.page * this.limt >= this.total
+            }
+        },
         data(){
             return{
                 articleList: [],
+                articleListFetching: false,
 
                 total: 0,
                 page: 1,
-                limt: 5
+                limt: 10
             }
         },
         created(){
@@ -76,9 +81,11 @@
                 }else{
                     console.log('ip', res.data)
                 }
+                this.articleListFetching = false;
             },
 
             loadmore(){
+                this.articleListFetching = true;
                 this.page++;
                 this.getArticleList();
             }

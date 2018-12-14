@@ -37,6 +37,7 @@ export const mutations = {
 }
 
 export const actions = {
+	// 点赞留言墙
 	async setGuesbookLike ({ commit, dispatch, rootState }, data){
 		let res = await setGuestbookLike(data);
 		let localItem = await localForage.getItem('GUESBOOK_LIKE');
@@ -49,32 +50,38 @@ export const actions = {
 
 		return res.data;
 	},
-
 	async getGuesbookLike ({ commit, dispatch, rootState }){
 		let localItem = await localForage.getItem('GUESBOOK_LIKE');
+		localItem = localItem == null ? [] : localItem;
 		commit(SET_GUESBOOK_LIKE, localItem);
 		return localItem;
 	},
 
-	async setArticleLike ({ commit, dispatch, rootState }, data){
+	// 点赞文章
+	async setArticleLike ({ commit, dispatch, state, rootState }, data){
 		let res = await setArticleLike(data);
-		let localItem = await localForage.getItem('ARTICLE_LIKE');
 
+		// 设置历史点赞记录
+		let localItem = await localForage.getItem('ARTICLE_LIKE');
 		let arr = [];
 		if( localItem ) arr = localItem;
 		arr.push( data.uuid );
 		await localForage.setItem('ARTICLE_LIKE', arr);
 		commit(SET_ARTICLE_LIKE, arr);
 
+		//重新获取文章内容
+		dispatch('article/getArticle', data, {root: true});
+
 		return res.data;
 	},
-
 	async getArticleLike ({ commit, dispatch, rootState }){
 		let localItem = await localForage.getItem('ARTICLE_LIKE');
+		localItem = localItem == null ? [] : localItem;
 		commit(SET_ARTICLE_LIKE, localItem);
 		return localItem;
 	},
 
+	// 点赞文章评论
 	async setCommentLike ({ commit, dispatch, rootState }, data){
 		let res = await setCommentLike(data);
 		let localItem = await localForage.getItem('COMMENT_LIKE');
@@ -87,13 +94,14 @@ export const actions = {
 
 		return res.data;
 	},
-
 	async getCommentLike ({ commit, dispatch, rootState }){
 		let localItem = await localForage.getItem('COMMENT_LIKE');
+		localItem = localItem == null ? [] : localItem;
 		commit(SET_COMMENT_LIKE, localItem);
 		return localItem;
 	},
 
+	// 点赞文章评论回复
 	async setCommentReplyLike ({ commit, dispatch, rootState }, data){
 		let res = await setCommentReplyLike(data);
 		let localItem = await localForage.getItem('COMMENT_REPLY_LIKE');
@@ -106,11 +114,11 @@ export const actions = {
 
 		return res.data;
 	},
-
 	async getCommentReplyLike ({ commit, dispatch, rootState }){
 		let localItem = await localForage.getItem('COMMENT_REPLY_LIKE');
+		localItem = localItem == null ? [] : localItem;
 		commit(SET_COMMENT_REPLY_LIKE, localItem);
 		return localItem;
-	},
+	}
 
 }
