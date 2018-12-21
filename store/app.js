@@ -42,12 +42,6 @@ export const mutations = {
 }
 
 export const actions = {
-	// 博客主题设置
-	async getTheme ({ commit, state }) {
-		let item = await localForage.getItem('THEME_KEY');
-		const theme = item ? item : 'light';
-		commit(SET_THEME, theme)
-	},
 	async updateTheme ({ commit, state }, theme) {
 		if (theme) {
 			await localForage.setItem('THEME_KEY', theme);

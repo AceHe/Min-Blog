@@ -8,9 +8,9 @@
                     条{{ listType }}
                 </div>
                 <div class="sort">
-                    <a class="sort-type" :class="{ active: latestSort }" @click="handleSort('createdAt', -1)">最新</a>
-                    <i class="seprate"></i>
-                    <a class="sort-type" :class="{ active: hottestSort }" @click="handleSort('ups', -1)">最热</a>
+                    <!-- <a class="sort-type" :class="{ active: latestSort }" @click="handleSort('createdAt', -1)">最新</a> -->
+                    <!-- <i class="seprate"></i> -->
+                    <!-- <a class="sort-type" :class="{ active: hottestSort }" @click="handleSort('ups', -1)">热评</a> -->
                 </div>
             </div>
             <div class="list-content">
@@ -22,7 +22,6 @@
                             :comment-uuid="commentUuid"
                             :is-child="isChild"
                             :index="index"
-                            @on-updateLike="handleUpdateLike"
                             @on-reply="handleSetReply"
                             @on-reply-publish="handleSubReplyPublish">
                         </CommentItem>
@@ -95,13 +94,6 @@
 
             },
 
-            // 点赞评论、回复
-            handleUpdateLike( index ){
-                console.log( this.list[index] );
-                // 评论点赞数加一
-                this.list[index].person.ups++
-            },
-
             // 回复 文章评论 下的 评论 的 回复
             handleSetReply(index){
                 this.replyTarget = this.list[index];
@@ -121,8 +113,6 @@
             // 回复 文章评论
             async handleReplyPublish( data, type ){
                 if( type != 1 ) return;
-
-                console.log('回复评论')
 
                 let info = data;
                 info.type = type;

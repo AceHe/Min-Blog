@@ -114,19 +114,10 @@
             Comment
         },
         extends: Base,
-        asyncData ({ params }) {
-            console.log(1112)
-            return getArticleContent( { uuid: params.id } )
-                .then((res) => {
-                    console.log(res)
-                    return { article: res.data.data }
-                })
+        async asyncData({ params }) {
+            const { data } = await getArticleContent( { uuid: params.id } )
+            return { article: data.data }
         },
-        // async asyncData({ params }) {
-            
-        //     const { data } = await getArticleContent( { uuid: params.id } )
-        //     return { article: data.data }
-        // },
         validate ({ params }) {
             return !!params.id
         },
@@ -146,24 +137,20 @@
             }
         },
         computed: {
-            // 获取文章内容
-            // article () { 
-            //     return this.$store.getters['article/article']
-            // },
             // 是否展示标题
             showArticleTitle () { 
                 return this.$store.getters['app/showArticleTitle']
             },
             // 判断是否已点赞文章
             liked () {
-                if (!this.article) return false;
                 const res = this.$store.getters['history/articleLike'];
                 return !!res.find(item => item === this.article.uuid)
             }
         },
         data(){
             return {
-                // article: {},
+                article: {},
+
                 articleLiking: false,
                 articleFontSize: 16,
 
@@ -178,7 +165,7 @@
 
             Bus.$on('getComment',()=>{
                 this.handleGetArticle(false);
-            })
+            });
         },
         beforeDestroy (){
             window.removeEventListener('scroll', this.handleScroll);
@@ -193,7 +180,7 @@
 
             // 点赞文章
             async like( uuid ) {
-                console.log( '11' )
+                this.article.meta.ups++
             },
 
             // 发表留言
@@ -213,7 +200,9 @@
                 let data = { uuid: this.article.uuid };
                 let res = await this.$store.dispatch('article/getArticle', data);
 
-                if( res.data.code == 0 && reply ){
+                if( res.code == 0 ){
+                    this.article = res.data;
+                    if(!reply) return;
                     this.$scrollToComments();
                     this.$refs.comment.handleEmpty();
                 }

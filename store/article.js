@@ -35,31 +35,38 @@ export const mutations = {
 }
 
 export const actions = {
-	// 文章内容
-	async getArticle ({ commit, state }, data) {
-		const res = await getArticleContent(data);
-		commit(GET_ARTICLE, res.data.data)
-		return res;
+	async getArticle ({ commit, state }, param) {
+		const { data } = await getArticleContent(param);
+		if( data.code == 0 ){
+			commit(GET_ARTICLE, data.data)
+		}
+		return data;
 	},
 
 	// 全部分类
 	async getCategory ({ commit, state }) {
-		const res = await getCategorys();
-		commit(GET_CATEGORY, res.data.data)
-		return res;
+		const { data } = await getCategorys();
+		if( data.code == 0 ){
+			commit(GET_CATEGORY, data.data );
+		}
+		return data;
 	},
 
 	// 全部标签
 	async getTag ({ commit, state }) {
-		const res = await getTags();
-		commit(GET_TAG, res.data.data)
-		return res;
+		const { data } = await getTags();
+		if( data.code == 0 ){
+			commit(GET_TAG, data.data)
+		}
+		return data;
 	},
 
 	// 热门文章
 	async getHot ({ commit, state }) {
-		const res = await getHots();
-		commit(GET_HOT, res.data.data)
-		return res;
+		const { data } = await getHots();
+		if( data.code == 0 ){
+			commit(GET_HOT, data.data)
+		}
+		return data;
 	}
 }

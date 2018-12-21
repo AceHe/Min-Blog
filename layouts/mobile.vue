@@ -30,20 +30,6 @@
                     class: 'mobile theme-' + this.$store.getters['app/theme']
                 }
             }
-        },
-        created() {
-            this.init()
-        },
-        methods:{
-            async init () {
-                await this.$store.dispatch('app/getTheme');
-                
-                await this.$store.dispatch('article/getCategory');
-                await this.$store.dispatch('article/getTag');
-                await this.$store.dispatch('article/getHot');
-                await this.$store.dispatch('website/getWebsite');
-                await this.$store.dispatch('website/getFriendLink');
-            }
         }
     }
 </script>

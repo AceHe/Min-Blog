@@ -70,6 +70,7 @@ module.exports = {
         { src: '@/plugins/particles', ssr: false },
         { src: '@/plugins/router', ssr: false },
         { src: '@/plugins/scroll-to', ssr: false },
+        { src: '@/plugins/storage-to-store', ssr: false }
     ],
 
     modules: [

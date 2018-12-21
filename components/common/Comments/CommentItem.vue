@@ -15,7 +15,7 @@
             </div>
             <span class="meta">
                 <span class="location" v-if="comment.person.address">
-                    <span>{{ comment.person.address }}</span>
+                    <!-- <span>{{ comment.person.address }}</span> -->
                 </span>
                 <template v-if="!mobileLayout">
                     <span class="os" v-html="OSParse(comment.person.navigator)" v-if="comment.person.navigator"></span>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-
+    import Bus from '@/utils/bus'
     import { parseTime } from '@/utils/filters'
     import { UAParse, OSParse } from '@/utils/metaParse'
 
@@ -161,7 +161,7 @@
                 if( res.code == 0 ){
                     this.isLiked = true;
                     this.liking = true;
-                    this.$emit( 'on-updateLike', this.index);
+                    Bus.$emit('getComment');
                 }
 
             },

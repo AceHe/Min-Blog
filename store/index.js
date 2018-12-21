@@ -7,5 +7,13 @@ export const actions = {
 		if (mobileClient) {
 			commit('app/SET_MOBILE_LAYOUT', true)
 		}
+		return Promise.all([
+			dispatch('article/getCategory'),
+			dispatch('article/getTag'),
+			dispatch('article/getHot'),
+
+			dispatch('website/getWebsite'),
+            dispatch('website/getFriendLink')
+		])
     }
 }
