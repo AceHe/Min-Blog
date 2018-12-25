@@ -6,19 +6,22 @@ const SET_GUESBOOK_LIKE = 'SET_GUESBOOK_LIKE'; // 点赞留言墙
 const SET_ARTICLE_LIKE = 'SET_ARTICLE_LIKE';   // 点赞文章
 const SET_COMMENT_LIKE = 'SET_COMMENT_LIKE';   // 点赞文章评论
 const SET_COMMENT_REPLY_LIKE = 'SET_COMMENT_REPLY_LIKE';   // 点赞文章评论的回复
+const SET_USER_INFO = 'SET_USER_INFO'; 			// 留言用户信息保存
 
 export const state = () => ({
 	guesbookLike: [],
 	articleLike: [],
 	commentLike: [],
-	commentReplyLike: []
+	commentReplyLike: [],
+	userInfo: {}
 })
 
 export const getters = {
 	guesbookLike: state => state.guesbookLike,
 	articleLike: state => state.articleLike,
 	commentLike: state => state.commentLike,
-	commentReplyLike: state => state.commentReplyLike
+	commentReplyLike: state => state.commentReplyLike,
+	userInfo: state => state.userInfo
 }
 
 export const mutations = {
@@ -33,6 +36,9 @@ export const mutations = {
 	},
 	SET_COMMENT_REPLY_LIKE (state, data) {
 		state.commentReplyLike = data
+	},
+	SET_USER_INFO (state, data) {
+		state.userInfo = data
 	}
 }
 
@@ -119,6 +125,17 @@ export const actions = {
 		localItem = localItem == null ? [] : localItem;
 		commit(SET_COMMENT_REPLY_LIKE, localItem);
 		return localItem;
-	}
+	},
 
+	// 留言评论用户信息
+	async setUserInfo ({ commit, dispatch, rootState }, data){
+		await localForage.setItem('USER_INFO', data);
+		commit(SET_USER_INFO, data);
+		return data;
+	},
+	async getUserInfo ({ commit, dispatch, rootState }){
+		let localItem = await localForage.getItem('USER_INFO');
+		commit(SET_USER_INFO, localItem);
+		return localItem;
+	}
 }

@@ -2,7 +2,7 @@
 	"name": "min-blog",
 	"config": {
 		"nuxt": {
-			"host": "198.181.41.13",
+			"host": "localhost",
 			"port": "8205"
 		}
 	},

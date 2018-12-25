@@ -125,7 +125,7 @@
 
         .content {
             margin $padding-sm 0
-            white-space pre
+            white-space pre-wrap;
         }
 
         .meta {

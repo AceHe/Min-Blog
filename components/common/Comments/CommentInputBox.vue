@@ -35,6 +35,9 @@
                                 name="site" 
                                 autocomplete="false">
                         </div>
+                        <div class="clear" v-if="user && !mobileLayout">
+                            <button @click="clear" title="退出">退出</button>
+                        </div>
                     </div>
                 </div>
 
@@ -94,6 +97,11 @@
             },
             typeText () {
                 return this.isMessage ? '留言' : this.isChild ? '回复' : '评论'
+            },
+            user () {
+                let item = this.$store.getters['history/userInfo'];
+                if( item ) return true;
+                return false;
             }
         },
         data(){
@@ -107,15 +115,20 @@
                 content: '',
             }
         },
+        created(){
+            this.getUserInfo();
+        },
         methods: {
-            notify(text){
-                return this.$notify({
-                    group: 'auth',
-                    type: 'warn',
-                    text: text
-                });
+            // 获取用户信息
+            async getUserInfo(){
+                let item = await this.$store.dispatch('history/getUserInfo');
+                if( item == null ) return;
+                this.name = item.name;
+                this.email = item.email;
+                this.site = item.site;
             },
 
+            // 提交留言评论
             async submit() {
                 if (!this.content) return this.notify('你要说啥？');
                 if (!this.name) return this.notify('你的昵称呢？');
@@ -148,22 +161,44 @@
                 this.$emit('on-clear-reply')
             },
 
-            // 发布成功以后,清空状态
-            handleEmpty(){
+            // 发布成功以后,保存信息,清空状态
+            async handleEmpty(flag){
+                let data = {
+                    name: this.name,
+                    email: this.email,
+                    site: this.site
+                }
+                await this.$store.dispatch('history/setUserInfo', data);
+
                 // 隐藏loading
                 this.typeTextFetching = false;
 
+                // 清空 editor, 如果是留言墙则不需要执行
+                if( flag ) return;
+                this.$refs.editor.handleEmpty();
+            },
+
+            // 清除用户信息
+            async clear () {
+                await this.$store.dispatch('history/setUserInfo', null);
                 // 清空输入框
                 this.name = '';
                 this.email = '';
                 this.site = '';
-
-                // 清空 editor
-                this.$refs.editor.handleEmpty();
             },
 
+            // 获取焦点
             focus () {
                 this.$refs.editor.focus()
+            },
+
+            // 提示框
+            notify(text){
+                return this.$notify({
+                    group: 'auth',
+                    type: 'warn',
+                    text: text
+                });
             }
         }
     }

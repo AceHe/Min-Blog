@@ -168,7 +168,6 @@
 
             // 显示评论的回复
             handleToggleSubComments(){
-                console.log( this.isChild )
                 if( !this.isChild ){
                     this.showSub = !this.showSub;
                     this.parentUuid = this.comment.uuid;

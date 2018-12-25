@@ -104,9 +104,6 @@
 
 			this.getGuestbook();
 		},
-		mounted(){
-			
-		},
 		methods: {
 			// 获取留言墙列表
 			async getGuestbook() {
@@ -137,16 +134,11 @@
 					};                	
                 }
 
-                //	判断是不是申请友链
-                if ( this.from() === 'about' && this.friendInputBox ) {
-					this.openBox()
-					this.$nextTick(() => {
-						let inputBox = this.$refs.inputBox;
-						inputBox.content = `友链申请\n称呼：\n网站：\nGithub(如果有)：\n`
-						inputBox.focus();
-					})
+                //	判断是不是第一次跳转过来的友链申请
+                if ( this.from() === 'about' ) {
+					this.openBox();
 				}else{
-					this.showInputBox = false;
+					this.changeBoxState();
 				}
 
 				this.messageListFetching = false;
@@ -192,6 +184,9 @@
 					this.columnCount= 0;
 					this.columnData = this.mobileLayout ? [] : [[],[],[]];
 					this.getGuestbook();
+
+					// 发表留言成功后重置输入框并保存用户信息避免多次输入
+					this.$refs.inputBox.handleEmpty(true);
                 }
 			},
 

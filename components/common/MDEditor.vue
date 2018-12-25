@@ -27,7 +27,7 @@
         },
         mounted(){
             if (this.from() === 'about') {
-                this.value = `友链申请\n称呼：\n网站：\nGithub(如果有)：\n`
+                this.value = `友链申请\n称呼：\n头像：\n简介：\n网站：\nGithub：\n`
             };
         },
         methods: {
