@@ -30,10 +30,11 @@ module.exports = {
             { name: 'apple-mobile-web-app-capable', content: 'yes' },
             { name: 'author', content: 'acehemin@qq.com' },
             { name: 'theme-color', content: '#302e31' },
-            { hid: 'keywords', name: 'keywords', content: 'Blog,前端,Vue,Node.js,小荷才露尖尖角' },
-            { hid: 'description', name: 'description', content: '小荷才露尖尖角' }
+            { hid: 'keywords', name: 'keywords', content: 'Blog,前端,Vue,Node.js,小何才露尖尖角' },
+            { hid: 'description', name: 'description', content: '小何才露尖尖角' }
         ],
         link: [
+            { rel: 'shortcut icon', type: 'image/x-icon', href: '//static.jooger.me/img/common/favicon/favicon.ico' },
             { rel: 'stylesheet', type: 'text/css', href: '//fonts.loli.net/css?family=Damion' },
         ]
     },

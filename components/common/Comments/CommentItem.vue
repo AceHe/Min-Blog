@@ -7,6 +7,8 @@
                         <img :src="comment.person.avatar" alt="">
                     </div>
                     <span class="name">{{ comment.person.name }}</span>
+                    <span class="tag" 
+                        v-if="comment.person.name == 'Ace' && comment.person.site == 'http://www.hemin.vip'">博主</span>
                 </a>
                 <span class="reply" v-if="forward">
                 <span class="text">回复</span>
@@ -15,7 +17,7 @@
             </div>
             <span class="meta">
                 <span class="location" v-if="comment.person.address">
-                    <!-- <span>{{ comment.person.address }}</span> -->
+                    <span>{{ comment.person.address }}</span>
                 </span>
                 <template v-if="!mobileLayout">
                     <span class="os" v-html="OSParse(comment.person.navigator)" v-if="comment.person.navigator"></span>
@@ -236,6 +238,15 @@
                 .name {
                     font-weight 700
                     font-size $font-size-base
+                }
+                
+                .tag {
+                    font-size $font-size-sm
+                    padding 1px 6px
+                    background #e80505
+                    color #fff
+                    margin-left 6px
+                    border-radius 6px
                 }
             }
 

@@ -43,17 +43,20 @@
 			window.removeEventListener('scroll', this.handleScroll);
 		},
 		methods: {
+			// 监听滚动
 			handleScroll () {
 				const scrollTop = getScroll(document.body, true)
 				this.showScrollTop = scrollTop * 2 > window.screen.availHeight
 			},
 
+			// 更换主题
             async updateTheme (theme) {
                 await this.$store.dispatch('app/updateTheme', theme);
             },
 
+            // 返回顶部
 			goTop () {
-				scrollTo(0, 500, {
+				this.$scrollTo(0, 500, {
 					easing: 'ease'
 				})
 			}
